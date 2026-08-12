@@ -1,0 +1,1539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Watch — Deployment Standing Orders</title>
+<meta name="description" content="Watch board for a house left empty during a deployment.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EAE9E0">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14150E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="House Watch">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;padding-bottom:env(safe-area-inset-bottom)}
+  h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}
+  ul,ol{margin:0;padding:0;list-style:none}
+  img,svg{max-width:100%}
+  button,input,select,textarea{font:inherit;color:inherit}
+  table{border-collapse:collapse}</style>
+</head>
+<body>
+<style>
+/* ============================ TOKENS ============================ */
+:root{
+  --bg:#EAE9E0; --surface:#F4F3EC; --raised:#DFDDD1; --sunken:#E1DFD3;
+  --ink:#1B1C15; --ink-2:#5C5E50; --ink-3:#8A8C7B;
+  --line:#D1CFC1; --line-2:#BCB9A8;
+  --brass:#7A7742; --brass-soft:#A8A472;
+  --ok:#2C6E4B;   --ok-bg:#DCE8DF;
+  --warn:#95610F; --warn-bg:#F0E5CB;
+  --crit:#A93524; --crit-bg:#F1DBD6;
+  --shadow:0 1px 0 rgba(27,28,21,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#14150E; --surface:#1D1F16; --raised:#262819; --sunken:#101109;
+    --ink:#E9E8DB; --ink-2:#A5A695; --ink-3:#7B7D6C;
+    --line:#2E3122; --line-2:#3E4130;
+    --brass:#C2BC77; --brass-soft:#8E8A53;
+    --ok:#5FB98B;   --ok-bg:#16301F;
+    --warn:#E0A84A; --warn-bg:#332710;
+    --crit:#E77A66; --crit-bg:#351B16;
+    --shadow:0 1px 0 rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14150E; --surface:#1D1F16; --raised:#262819; --sunken:#101109;
+  --ink:#E9E8DB; --ink-2:#A5A695; --ink-3:#7B7D6C;
+  --line:#2E3122; --line-2:#3E4130;
+  --brass:#C2BC77; --brass-soft:#8E8A53;
+  --ok:#5FB98B;   --ok-bg:#16301F;
+  --warn:#E0A84A; --warn-bg:#332710;
+  --crit:#E77A66; --crit-bg:#351B16;
+  --shadow:0 1px 0 rgba(0,0,0,.3);
+}
+:root[data-theme="light"]{
+  --bg:#EAE9E0; --surface:#F4F3EC; --raised:#DFDDD1; --sunken:#E1DFD3;
+  --ink:#1B1C15; --ink-2:#5C5E50; --ink-3:#8A8C7B;
+  --line:#D1CFC1; --line-2:#BCB9A8;
+  --brass:#7A7742; --brass-soft:#A8A472;
+  --ok:#2C6E4B;   --ok-bg:#DCE8DF;
+  --warn:#95610F; --warn-bg:#F0E5CB;
+  --crit:#A93524; --crit-bg:#F1DBD6;
+  --shadow:0 1px 0 rgba(27,28,21,.06);
+}
+
+:root{
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+}
+
+/* ============================ BASE ============================ */
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 14px 96px}
+h1,h2,h3{margin:0; font-weight:600; text-wrap:balance}
+p{margin:0}
+button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+:focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:2px}
+.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+
+/* ============================ HEADER ============================ */
+header{
+  position:sticky; top:0; z-index:30;
+  background:var(--bg); border-bottom:1px solid var(--line);
+}
+.hbar{
+  max-width:760px; margin:0 auto; padding:10px 14px 8px;
+  display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+}
+.brand{
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--brass); font-weight:600;
+  display:inline-flex; align-items:center; gap:7px;
+}
+/* the mark's window is a status lamp — same language as the tiles */
+.mark{width:18px; height:18px; flex:none}
+.mark .shell{fill:none; stroke:var(--brass); stroke-width:1.9; stroke-linejoin:round; stroke-linecap:round}
+.mark .lens{fill:var(--ok)}
+.mark.warn .lens{fill:var(--warn)}
+.mark.crit .lens{fill:var(--crit)}
+.hbar .spacer{flex:1}
+.clock{font-family:var(--mono); font-size:11px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.iconbtn{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-2); border:1px solid var(--line-2); padding:3px 8px; border-radius:2px;
+}
+.iconbtn:hover{color:var(--ink); border-color:var(--brass)}
+.savestate{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 7px; border-radius:2px; border:1px solid transparent; white-space:nowrap;
+}
+.savestate.ok{color:var(--ink-3); cursor:default}
+.savestate.warn{color:var(--warn); background:var(--warn-bg); border-color:var(--warn); font-weight:600}
+.savestate.bad{
+  color:var(--crit); background:var(--crit-bg); border-color:var(--crit); font-weight:600;
+}
+
+/* countdown */
+.count{
+  max-width:760px; margin:0 auto; padding:0 14px 10px;
+  display:flex; align-items:flex-end; gap:12px;
+}
+.count .big{
+  font-family:var(--mono); font-size:38px; font-weight:600; line-height:.9;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+}
+.count .lab{padding-bottom:3px}
+.count .lab div:first-child{font-size:13px; color:var(--ink-2); line-height:1.25}
+.track{
+  max-width:760px; margin:0 auto; padding:0 14px 10px;
+}
+.track .rail{height:3px; background:var(--sunken); border:1px solid var(--line); position:relative}
+.track .fill{position:absolute; inset:0 auto 0 0; background:var(--brass-soft)}
+.track .ticks{
+  display:flex; justify-content:space-between; margin-top:5px;
+  font-family:var(--mono); font-size:10px; color:var(--ink-3);
+}
+
+/* ============================ TILES ============================ */
+.tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:14px 0 4px}
+.tile{
+  background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  padding:9px 9px 10px; display:flex; flex-direction:column; gap:6px; text-align:left;
+  box-shadow:var(--shadow);
+}
+.tile:hover{border-color:var(--brass-soft)}
+.tile .top{display:flex; align-items:center; gap:6px}
+.lamp{
+  width:9px; height:9px; border-radius:50%; flex:none;
+  background:var(--ok); box-shadow:0 0 0 2px color-mix(in srgb, var(--ok) 22%, transparent);
+}
+.lamp.warn{background:var(--warn); box-shadow:0 0 0 2px color-mix(in srgb, var(--warn) 22%, transparent)}
+.lamp.crit{background:var(--crit); box-shadow:0 0 0 2px color-mix(in srgb, var(--crit) 25%, transparent)}
+.tile .name{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2)}
+.tile .val{font-size:13px; font-weight:600; line-height:1.25}
+.tile .sub{font-family:var(--mono); font-size:10px; color:var(--ink-3); line-height:1.3}
+
+/* ============================ NAV ============================ */
+nav{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  border-bottom:1px solid var(--line); margin:14px -14px 0; padding:0 14px;
+  display:flex; gap:2px; overflow-x:auto; scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav button{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  padding:9px 9px 8px; color:var(--ink-3); border-bottom:2px solid transparent; white-space:nowrap;
+}
+nav button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--brass)}
+nav button .n{
+  font-size:9.5px; color:var(--crit); margin-left:4px; letter-spacing:0;
+}
+
+/* ============================ SECTIONS ============================ */
+section{margin-top:26px}
+.shead{
+  display:flex; align-items:baseline; gap:8px;
+  border-bottom:1px solid var(--line-2); padding-bottom:5px; margin-bottom:2px;
+}
+.shead h2{font-size:15px; letter-spacing:-.01em}
+.shead .ct{
+  font-family:var(--mono); font-size:10.5px; color:var(--ink-3);
+  margin-left:auto; font-variant-numeric:tabular-nums;
+}
+.note{
+  font-size:13px; color:var(--ink-2); line-height:1.5; margin:8px 0 2px; max-width:62ch;
+}
+
+/* ============================ ROWS ============================ */
+.rows{display:flex; flex-direction:column}
+.row{
+  display:grid; grid-template-columns:3px 22px 1fr; gap:0 9px;
+  align-items:start; padding:10px 0 10px; border-bottom:1px solid var(--line);
+}
+.row .stripe{align-self:stretch; background:transparent; border-radius:1px}
+.row.s-crit .stripe{background:var(--crit)}
+.row.s-warn .stripe{background:var(--warn)}
+.row.s-ok   .stripe{background:var(--ok)}
+.chk{
+  width:19px; height:19px; margin-top:1px; border:1.5px solid var(--line-2); border-radius:2px;
+  display:flex; align-items:center; justify-content:center; flex:none; background:var(--surface);
+}
+.chk:hover{border-color:var(--brass)}
+.chk[aria-pressed="true"]{background:var(--ok); border-color:var(--ok)}
+.chk[aria-pressed="true"]::after{
+  content:""; width:9px; height:5px; border-left:2px solid var(--bg); border-bottom:2px solid var(--bg);
+  transform:rotate(-45deg) translate(1px,-1px);
+}
+.body .t{font-size:14.5px; line-height:1.4}
+.body .d{font-size:12.5px; color:var(--ink-2); line-height:1.45; margin-top:3px; max-width:60ch}
+.body .meta{
+  display:flex; flex-wrap:wrap; gap:5px 8px; margin-top:6px; align-items:center;
+  font-family:var(--mono); font-size:10px; letter-spacing:.05em; color:var(--ink-3);
+}
+.row.done .body .t{color:var(--ink-3); text-decoration:line-through; text-decoration-color:var(--line-2)}
+.row.done .body .d{opacity:.55}
+
+.pill{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.09em; text-transform:uppercase;
+  padding:2px 5px; border-radius:2px; border:1px solid var(--line-2); color:var(--ink-2);
+  white-space:nowrap;
+}
+.pill.crit{background:var(--crit-bg); border-color:transparent; color:var(--crit); font-weight:600}
+.pill.warn{background:var(--warn-bg); border-color:transparent; color:var(--warn); font-weight:600}
+.pill.ok{background:var(--ok-bg); border-color:transparent; color:var(--ok); font-weight:600}
+.pill.key{border-color:var(--brass-soft); color:var(--brass)}
+
+/* ============================ STANDING WARNINGS ============================ */
+.warns{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+.warns article{background:var(--surface); padding:11px 12px; display:flex; gap:10px}
+.warns .mk{
+  font-family:var(--mono); font-size:10px; color:var(--crit); font-weight:600;
+  letter-spacing:.1em; padding-top:2px; flex:none;
+}
+.warns h3{font-size:13.5px; margin-bottom:3px}
+.warns p{font-size:12.5px; color:var(--ink-2); line-height:1.45; max-width:60ch}
+
+/* ============================ CONTACTS ============================ */
+.ctable{width:100%; border-collapse:collapse; font-size:13.5px}
+.ctable th{
+  text-align:left; font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500;
+  padding:0 8px 5px 0; border-bottom:1px solid var(--line-2);
+}
+.ctable td{padding:8px 8px 8px 0; border-bottom:1px solid var(--line); vertical-align:top}
+.ctable td:first-child{white-space:nowrap; color:var(--ink-2)}
+.fld{
+  font:inherit; font-size:13.5px; width:100%; background:transparent; color:var(--ink);
+  border:none; border-bottom:1px dashed var(--line-2); padding:2px 0;
+}
+.fld:focus{outline:none; border-bottom-color:var(--brass); border-bottom-style:solid}
+.fld::placeholder{color:var(--ink-3); opacity:.7}
+.scroller{overflow-x:auto}
+
+/* ============================ SETTINGS ============================ */
+dialog{
+  border:1px solid var(--line-2); border-radius:4px; background:var(--surface); color:var(--ink);
+  padding:0; width:min(460px,calc(100vw - 28px)); max-height:86vh;
+}
+dialog::backdrop{background:rgba(20,21,14,.55)}
+.dlg-h{
+  display:flex; align-items:center; gap:8px; padding:12px 14px;
+  border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--surface);
+}
+.dlg-h h2{font-size:14px}
+.dlg-b{padding:14px; display:flex; flex-direction:column; gap:13px}
+.f{display:flex; flex-direction:column; gap:4px}
+.f label{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.f input,.f select{
+  font:inherit; font-size:14px; background:var(--bg); color:var(--ink);
+  border:1px solid var(--line-2); border-radius:2px; padding:7px 8px; width:100%;
+}
+.f .hint{font-size:11.5px; color:var(--ink-3); line-height:1.4}
+.f2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.resume{
+  background:var(--bg); border:1px solid var(--line-2); border-left:3px solid var(--brass);
+  border-radius:2px; padding:10px 11px;
+}
+.resume-row{display:flex; gap:7px; flex-wrap:wrap; margin:2px 0 4px}
+.toggle{display:flex; align-items:flex-start; gap:9px; cursor:pointer}
+.toggle input{margin-top:3px; accent-color:var(--brass); width:16px; height:16px; flex:none}
+.toggle span{font-size:13.5px; line-height:1.4}
+.toggle small{display:block; color:var(--ink-3); font-size:11.5px; line-height:1.4; margin-top:2px}
+.dlg-f{
+  display:flex; gap:8px; padding:12px 14px; border-top:1px solid var(--line);
+  position:sticky; bottom:0; background:var(--surface);
+}
+.btn{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  padding:8px 13px; border-radius:2px; border:1px solid var(--line-2); color:var(--ink-2);
+}
+.btn:hover{border-color:var(--brass); color:var(--ink)}
+.btn.pri{background:var(--brass); border-color:var(--brass); color:var(--bg); font-weight:600}
+.btn.pri:hover{opacity:.9; color:var(--bg)}
+
+/* ============================ MISC ============================ */
+.empty{
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-3); padding:18px 0;
+  border-bottom:1px solid var(--line);
+}
+.toolbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+.banner{
+  background:var(--warn-bg); border:1px solid var(--warn); border-radius:3px;
+  padding:9px 11px; font-size:12.5px; color:var(--warn); margin-top:12px; line-height:1.45;
+}
+footer{
+  margin-top:34px; padding-top:14px; border-top:1px solid var(--line);
+  font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:62ch;
+}
+[hidden]{display:none !important}
+
+@media (max-width:420px){
+  .tiles{gap:6px}
+  .tile{padding:8px}
+  .count .big{font-size:32px}
+  .f2{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important; animation:none !important}
+}
+</style>
+
+<header>
+  <div class="hbar">
+    <span class="brand">
+      <svg class="mark" id="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path class="shell" d="M3.2 11.2 12 3.6l8.8 7.6"></path>
+        <path class="shell" d="M5.6 11.9v8.5h12.8v-8.5"></path>
+        <circle class="lens" cx="12" cy="16.1" r="2.4"></circle>
+      </svg>
+      House Watch
+    </span>
+    <span class="spacer"></span>
+    <span class="clock" id="clock"></span>
+    <button class="savestate" id="saveState" type="button"></button>
+    <button class="iconbtn" id="btnSet">Setup</button>
+  </div>
+  <div class="count">
+    <span class="big" id="cdNum">—</span>
+    <span class="lab">
+      <div id="cdLab">days until you're home</div>
+      <div class="eyebrow" id="cdSub"></div>
+    </span>
+  </div>
+  <div class="track">
+    <div class="rail"><div class="fill" id="pFill" style="width:0%"></div></div>
+    <div class="ticks"><span id="tk1">—</span><span id="tk2">—</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tiles">
+    <button class="tile" data-goto="car">
+      <span class="top"><span class="lamp" id="lampCar"></span><span class="name">Vehicle</span></span>
+      <span class="val" id="valCar">—</span>
+      <span class="sub" id="subCar"></span>
+    </button>
+    <button class="tile" data-goto="lawn">
+      <span class="top"><span class="lamp" id="lampLawn"></span><span class="name">Lawn</span></span>
+      <span class="val" id="valLawn">—</span>
+      <span class="sub" id="subLawn"></span>
+    </button>
+    <button class="tile" data-goto="hvac">
+      <span class="top"><span class="lamp" id="lampHvac"></span><span class="name">HVAC</span></span>
+      <span class="val" id="valHvac">—</span>
+      <span class="sub" id="subHvac"></span>
+    </button>
+  </div>
+
+  <div id="storeWarn" class="banner" hidden></div>
+
+  <nav id="nav" role="tablist">
+    <button role="tab" data-tab="board" aria-selected="true">Board<span class="n" id="nBoard"></span></button>
+    <button role="tab" data-tab="prep" aria-selected="false">Before you go<span class="n" id="nPrep"></span></button>
+    <button role="tab" data-tab="away" aria-selected="false">While away</button>
+    <button role="tab" data-tab="contacts" aria-selected="false">Contacts</button>
+    <button role="tab" data-tab="return" aria-selected="false">Homecoming</button>
+  </nav>
+
+  <div id="panels"></div>
+
+  <footer>
+    Everything you tick is stored in this browser only — nothing is sent anywhere, and opening the
+    link on another device starts fresh. The indicator at the top says whether saving is working;
+    if it reads <strong>Not saving</strong>, tap it. Either way, press <strong>Back up</strong> once
+    you've finished setting up and keep the file — <strong>Restore from file</strong> rebuilds
+    everything, on this device or any other. Dates are calculated in the house's time zone, not yours.
+  </footer>
+</div>
+
+<input type="file" id="restoreFile" accept=".json,.txt,application/json,text/plain" hidden>
+
+<dialog id="dlg">
+  <div class="dlg-h"><h2>Setup</h2><span style="flex:1"></span><button class="btn" id="dlgClose" type="button">Close</button></div>
+  <div class="dlg-b">
+    <div class="f resume">
+      <label>Been here before?</label>
+      <div class="resume-row">
+        <button class="btn" id="dlgRestoreFile" type="button">Restore from file</button>
+        <button class="btn" id="dlgRestorePaste" type="button">Paste a backup</button>
+      </div>
+      <span class="hint">Brings back your dates, contacts and every tick in one step — faster than
+        filling this in again.</span>
+    </div>
+    <div class="f2">
+      <div class="f"><label for="sDep">Departure</label><input type="date" id="sDep"></div>
+      <div class="f"><label for="sRet">Return</label><input type="date" id="sRet"></div>
+    </div>
+    <div class="f">
+      <label for="sTz">House time zone</label>
+      <select id="sTz">
+        <option value="America/New_York">Eastern</option>
+        <option value="America/Chicago">Central</option>
+        <option value="America/Denver">Mountain</option>
+        <option value="America/Phoenix">Arizona (no DST)</option>
+        <option value="America/Los_Angeles">Pacific</option>
+        <option value="America/Anchorage">Alaska</option>
+        <option value="Pacific/Honolulu">Hawaii</option>
+      </select>
+      <span class="hint">Due dates follow the house, so you're never a day off from overseas.</span>
+    </div>
+    <div class="f2">
+      <div class="f"><label for="sLawn">Mowing day</label><select id="sLawn"></select></div>
+      <div class="f"><label for="sClean">Cleaner's day</label><select id="sClean"></select></div>
+    </div>
+    <div class="f">
+      <label>Vehicle plan</label>
+      <select id="sCar">
+        <option value="tender">Battery maintainer on the car</option>
+        <option value="drive">Someone drives it every 2 weeks</option>
+        <option value="disconnect">Negative terminal disconnected</option>
+      </select>
+      <span class="hint" id="carHint"></span>
+    </div>
+    <label class="toggle"><input type="checkbox" id="sWater">
+      <span>Water main shut off at the street<small>Turns off the "run every faucet" rounds and adds valve steps to homecoming.</small></span></label>
+    <div class="f">
+      <label for="sName">Who's checking on the house</label>
+      <div class="f2" style="margin-top:2px">
+        <input id="sFam" placeholder="Family member"><input id="sFriend" placeholder="Friend">
+      </div>
+      <input id="sName" placeholder="House cleaner" style="margin-top:8px">
+    </div>
+  </div>
+  <div class="dlg-f">
+    <button class="btn pri" id="dlgSave" type="button">Save</button>
+    <span style="flex:1"></span>
+    <button class="btn" id="dlgReset" type="button">Clear all ticks</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+/* ========================================================================
+   STORAGE
+   ===================================================================== */
+/* This page runs in a third-party frame, where Safari blocks storage outright
+   and other browsers partition it. So: never assume a write worked — ask the
+   browser for access, read every write back, and say so plainly when it fails. */
+var KEY="housewatch.v1", mem=null, storeOK=false, lastSaved=null, unlocking=false;
+/* A successful write proves nothing: a browser that blocks third-party storage
+   still hands the page a memory-backed store that reads back fine and is thrown
+   away on close. The only honest proof is data that came back from a PREVIOUS
+   session, so the indicator stays amber until that actually happens. */
+var sessionProven=false;
+
+function probeStore(){
+  try{
+    localStorage.setItem("__hw","1");
+    var v=localStorage.getItem("__hw");
+    localStorage.removeItem("__hw");
+    return v==="1";
+  }catch(e){ return false; }
+}
+storeOK=probeStore();
+
+function load(){
+  if(!storeOK) return mem;
+  try{ var r=localStorage.getItem(KEY); return r?JSON.parse(r):mem; }catch(e){ return mem; }
+}
+
+function save(){
+  mem=state;                       /* the in-session copy always survives */
+  if(!storeOK){
+    if(!unlocking){
+      unlocking=true;
+      unlockStore(function(ok){ unlocking=false; if(ok) save(); });
+    }
+    lastSaved=null; paintSaveState(); return false;
+  }
+  try{
+    var s=JSON.stringify(state);
+    localStorage.setItem(KEY,s);
+    if(localStorage.getItem(KEY)!==s){   /* written but not retained */
+      storeOK=false; lastSaved=null; paintSaveState(); return false;
+    }
+    lastSaved=new Date(); paintSaveState(); return true;
+  }catch(e){
+    storeOK=false; lastSaved=null; paintSaveState(); return false;
+  }
+}
+
+/* Safari will hand a third-party frame its storage back if the page asks
+   from inside a user gesture. Every caller here is inside a click. */
+function unlockStore(cb){
+  if(storeOK){ cb&&cb(true); return; }
+  if(!document.requestStorageAccess){ cb&&cb(false); return; }
+  var settle=function(){
+    storeOK=probeStore();
+    if(storeOK && mem){ try{ localStorage.setItem(KEY,JSON.stringify(mem)); }catch(e){} }
+    paintSaveState(); cb&&cb(storeOK);
+  };
+  try{
+    var p=document.requestStorageAccess();
+    if(p&&p.then) p.then(settle,settle); else settle();
+  }catch(e){ settle(); }
+}
+
+function paintSaveState(){
+  var b=document.getElementById("saveState"), warn=document.getElementById("storeWarn");
+  if(!b) return;
+  if(storeOK&&sessionProven){
+    b.className="savestate ok";
+    b.textContent=lastSaved?("Saved "+hhmm(lastSaved)):"Saved";
+    b.setAttribute("aria-label","This browser kept your entries from a previous session.");
+    if(warn) warn.hidden=true;
+  }else if(storeOK){
+    b.className="savestate warn";
+    b.textContent="Unconfirmed";
+    b.setAttribute("aria-label","Saving is untested on this device. Activate for how to confirm it.");
+    if(warn){
+      warn.hidden=false;
+      warn.textContent="First time on this device. Saving looks like it is working, but some phone "+
+        "browsers throw the data away on close without warning — so it is not confirmed yet. Finish "+
+        "Setup, then fully close this browser and open the link again. If your dates are still here, "+
+        "you are good for the whole deployment. If they are gone, this browser will not keep them, "+
+        "and you should keep a backup and use Restore each time.";
+    }
+  }else{
+    b.className="savestate bad";
+    b.textContent="Not saving";
+    b.setAttribute("aria-label","This browser is blocking saving. Activate to fix.");
+    if(warn){
+      warn.hidden=false;
+      warn.textContent="This browser is blocking the page from saving, so anything you enter will "+
+        "be gone when you close it. Tap “Not saving” at the top to let it through. If that "+
+        "doesn't take, use "+(hasDownloads()?"Back up to a file":"Copy backup")+" on the Board tab "+
+        "and keep it somewhere safe — restoring brings all of this back.";
+    }
+  }
+}
+function hhmm(d){
+  var h=d.getHours(), m=d.getMinutes();
+  return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;
+}
+
+/* ========================================================================
+   DATES  — all dates are plain YYYY-MM-DD strings in house-local time
+   ===================================================================== */
+var DAYNAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function parseD(s){ var p=String(s||"").split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+function fmtD(d){
+  var m=String(d.getMonth()+1); if(m.length<2) m="0"+m;
+  var dd=String(d.getDate()); if(dd.length<2) dd="0"+dd;
+  return d.getFullYear()+"-"+m+"-"+dd;
+}
+function addDays(s,n){ var d=parseD(s); d.setDate(d.getDate()+n); return fmtD(d); }
+function diffDays(a,b){ return Math.round((parseD(b)-parseD(a))/86400000); }
+function dow(s){ return parseD(s).getDay(); }
+function label(s){ var d=parseD(s); return MONS[d.getMonth()]+" "+d.getDate(); }
+function labelFull(s){ var d=parseD(s); return DAYNAMES[d.getDay()].slice(0,3)+" "+MONS[d.getMonth()]+" "+d.getDate(); }
+
+function houseToday(){
+  try{
+    return new Intl.DateTimeFormat("en-CA",{timeZone:state.cfg.tz,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+  }catch(e){ return fmtD(new Date()); }
+}
+function houseClock(){
+  try{
+    var t=new Intl.DateTimeFormat("en-US",{timeZone:state.cfg.tz,hour:"numeric",minute:"2-digit"}).format(new Date());
+    return t+" at the house";
+  }catch(e){ return ""; }
+}
+
+/* ========================================================================
+   CONTENT — pre-departure
+   ===================================================================== */
+var PREP=[
+{g:"Vehicle",id:"v1",key:1,t:"Load-test the battery now, before you commit to a plan",
+ d:"A battery that is already weak will not survive six weeks of parasitic draw no matter what you do. Most auto parts stores test free. If it is over four years old, replace it now rather than gamble."},
+{g:"Vehicle",id:"v2",key:1,t:"Put a battery maintainer on it and confirm the outlet is always live",
+ d:"A modern car pulls 20–50mA continuously for the alarm, keyless entry and body computer. That flattens a healthy battery in roughly 4–7 weeks — right inside your window. A trickle maintainer is the only fix that needs nobody's help. Plug it in, then check the garage outlet is not on a wall switch someone might flip."},
+{g:"Vehicle",id:"v3",t:"If no maintainer: disconnect the negative terminal or line up a driver",
+ d:"Disconnecting works but kills the alarm and loses radio and clock settings. If someone will drive it instead, it needs 20–30 minutes at highway speed every two weeks — idling in the driveway does not put meaningful charge back in."},
+{g:"Vehicle",id:"v4",t:"Fill the tank to about 90% and add stabilizer",
+ d:"A near-full tank leaves little air space for humid air to condense in. At two months, stabilizer is cheap insurance rather than strictly necessary."},
+{g:"Vehicle",id:"v5",t:"Inflate tires 3–5 PSI over the door placard",
+ d:"Reduces flat-spotting while it sits. Drop back to normal pressure when you get home."},
+{g:"Vehicle",id:"v6",t:"Do not set the parking brake",
+ d:"In a hot, humid garage, rear brake pads or shoes can rust themselves to the rotor or drum over six weeks. Leave it in gear or Park and chock a wheel instead."},
+{g:"Vehicle",id:"v7",t:"Close windows and sunroof, and deter rodents in the engine bay",
+ d:"Mice nest in warm engine compartments and chew wiring, and modern soy-based insulation attracts them. Peppermint pouches or rodent repellent packs under the hood, and traps on the garage floor."},
+{g:"Vehicle",id:"v8",key:1,t:"Do not cancel the auto insurance — ask about a stored-vehicle rate",
+ d:"Comprehensive still covers fire, theft, hail and falling trees while it sits, and a gap in coverage causes problems when you reinstate. Also check that registration and inspection do not expire while you are gone."},
+{g:"Vehicle",id:"v9",t:"Photograph the odometer and body, and leave a spare key",
+ d:"The photo settles any argument later. The spare goes to whoever might need to move it."},
+
+{g:"Water",id:"w1",key:1,t:"Shut the water main off if nobody needs running water",
+ d:"A burst supply hose is the single most expensive thing that happens to empty houses, and it runs for weeks unnoticed. If the cleaner needs water, close the individual valves instead: washing machine, dishwasher, icemaker, and every toilet."},
+{g:"Water",id:"w2",key:1,t:"Put wifi leak sensors under every water source",
+ d:"Kitchen sink, water heater, washing machine, each bathroom vanity, and the HVAC air handler drain pan. They are inexpensive, they push to your phone, and the air handler one is the sensor that catches a condensate backup before it comes through the ceiling."},
+{g:"Water",id:"w3",t:"Set the water heater to vacation mode",
+ d:"Vacation or the lowest setting — not fully off if there is still water in the system."},
+{g:"Water",id:"w4",t:"Protect the drain traps",
+ d:"P-traps in seldom-used sinks, showers and floor drains evaporate dry in about four to six weeks and let sewer gas into the house. Run each one, then pour in a few tablespoons of mineral oil to float on top and stop evaporation."},
+{g:"Water",id:"w5",t:"Deal with the toilets you won't use",
+ d:"Flush, then stretch plastic wrap over the bowl under the seat to slow evaporation and stop the ring."},
+{g:"Water",id:"w6",t:"Leave the washing machine door and detergent drawer open",
+ d:"Sealed shut for six weeks in a humid house, a front-loader grows mould you will smell for months."},
+
+{g:"HVAC",id:"h1",key:1,t:"Set the Ecobee to 78–80°F and cap humidity at 55%",
+ d:"Do not be tempted to set it to 85 to save money. Above roughly 82°F the system runs too briefly to pull moisture out, indoor humidity climbs, and mould starts on drywall, leather and books. If your equipment supports it, set a dehumidify-to setting of 50–55%."},
+{g:"HVAC",id:"h2",key:1,t:"Turn every Ecobee alert on and send them somewhere you'll actually see",
+ d:"High temperature, low temperature, high humidity, low humidity, and the filter reminder. Set the alert email to an address you read overseas, and add your family member as a secondary so someone stateside gets it too."},
+{g:"HVAC",id:"h3",t:"Turn off Smart Home/Away and hold one setpoint",
+ d:"With nobody in the house, occupancy sensing has nothing to detect and can drift the setpoint around. Set a single indefinite hold instead of a schedule."},
+{g:"HVAC",id:"h4",key:1,t:"Flush the AC condensate drain line with vinegar",
+ d:"This is the most common way an air conditioner dies in a humid summer. Algae blocks the drain, the float switch trips, and the system shuts off — the house goes to 95°F and 80% humidity within a day. Pour a cup of distilled vinegar down the cleanout before you leave, and have someone repeat it around week four."},
+{g:"HVAC",id:"h5",t:"New filter, and book a service visit for the week before you leave",
+ d:"You want a technician to find the failing capacitor now, not have it strand you in week two."},
+{g:"HVAC",id:"h6",t:"Confirm the Ecobee is on wifi that will survive a reboot",
+ d:"If the router power-cycles, the thermostat has to come back on its own. Check it is not on a guest network with a rotating password."},
+{g:"HVAC",id:"h7",t:"Run a dehumidifier with a hose drain in any basement or crawl space",
+ d:"Set it to 50%. A bucket-only unit fills in two days and then stops."},
+
+{g:"Interior",id:"i1",t:"Empty the fridge and shut the icemaker off",
+ d:"Turn the icemaker off and empty the bin — a six-week ice block fuses solid, and icemaker supply lines are a classic slow leak. If nobody is using the kitchen, empty the fridge entirely, unplug it, and prop both doors open."},
+{g:"Interior",id:"i2",t:"Leave a coin on a frozen cup of water in the freezer",
+ d:"If you find the coin at the bottom when you get back, the power was out long enough to thaw everything and refreeze it. Cheapest power-outage detector there is."},
+{g:"Interior",id:"i3",key:1,t:"Replace every smoke and CO detector battery",
+ d:"A low-battery chirp starting in week three, in an empty house, with a neighbour hearing it through the wall, is a genuinely bad situation. Replace them all now regardless of age."},
+{g:"Interior",id:"i4",t:"Unplug electronics, leave the essentials powered",
+ d:"Unplug televisions, computers and small appliances. Leave powered: the router, HVAC, refrigerator if in use, security system, dehumidifier, and the battery maintainer."},
+{g:"Interior",id:"i5",t:"Put the router on a smart plug with a nightly reboot",
+ d:"A hung router takes your thermostat, cameras and leak sensors offline all at once and there is nobody there to unplug it. A plug that cuts power for a minute each night recovers it automatically."},
+{g:"Interior",id:"i6",t:"Vary the lights, don't just put one lamp on a timer",
+ d:"Two or three smart bulbs on different evening windows that shift a little each day. A single lamp snapping on at 18:00 and off at 23:00 for six weeks reads as empty."},
+{g:"Interior",id:"i7",t:"Remove all food and take the trash out",
+ d:"Nothing edible left unsealed, pantry goods into sealed containers, disposal run and cleaned, every bin emptied. Six weeks is long enough for anything you forget to become an infestation."},
+{g:"Interior",id:"i8",t:"Have the house treated for pests a week or two before you leave",
+ d:"Ants and roaches move in fast in a hot, quiet, unoccupied house."},
+{g:"Interior",id:"i9",t:"Open interior and closet doors for airflow",
+ d:"Closed closets in a humid house are where mould shows up first. Leave blinds mostly closed against heat gain, but keep a couple of rooms looking normal from the street."},
+{g:"Interior",id:"i10",t:"Photograph every room",
+ d:"Wide shot of each room plus anything valuable. It settles insurance claims and gives your cleaner a reference for how things should look."},
+
+{g:"Exterior",id:"e1",key:1,t:"Sort the mail — a hold will not cover you",
+ d:"USPS Hold Mail maxes out at 30 days and you cannot stack two holds back to back online. For six weeks, either file a temporary forward or have your family member collect weekly. Nothing signals an empty house like an overflowing box."},
+{g:"Exterior",id:"e2",t:"Pause deliveries and stop the newspaper",
+ d:"Amazon and other subscriptions, any recurring shipments, and the paper. Also ask a neighbour to pick up flyers and door hangers."},
+{g:"Exterior",id:"e3",key:1,t:"Confirm the lawn service in writing for the whole window",
+ d:"Get it in writing with the exact dates, confirm the card on file does not expire while you are away, confirm they have gate access, and get the crew lead's mobile number. Ask them to text a photo after each cut — that turns a weekly guess into a weekly confirmation."},
+{g:"Exterior",id:"e4",t:"Decide what happens with the irrigation",
+ d:"Either set the controller for summer and confirm the rain sensor works, or shut the irrigation supply off and let the lawn go dormant. A stuck valve running unattended for six weeks is both a water bill and a foundation problem."},
+{g:"Exterior",id:"e5",t:"Cut shrubs back from the house and windows",
+ d:"Overgrown planting hides someone working on a window, holds moisture against the siding, and gives pests a bridge indoors."},
+{g:"Exterior",id:"e6",t:"Clear the gutters and check the downspouts run away from the foundation",
+ d:"Summer storms plus a blocked gutter equals water against the foundation for six weeks."},
+{g:"Exterior",id:"e7",t:"Store or tie down everything loose in the yard",
+ d:"Patio furniture, umbrellas, the grill, planters and trash bins. Close the propane valve on the grill. In storm season anything loose becomes a projectile."},
+{g:"Exterior",id:"e8",t:"Lock the garage properly",
+ d:"Deadbolt the side door, unplug the opener or put it in vacation lock mode, and make sure the emergency release cord cannot be fished through the top of the door."},
+{g:"Exterior",id:"e9",t:"Lock away the ladders",
+ d:"A ladder left beside the house is an invitation to a second-floor window."},
+{g:"Exterior",id:"e10",t:"Tell the alarm company and ask the police for vacation checks",
+ d:"Give the alarm company your dates and the names of everyone authorised to be there. Many police departments will do free vacation house checks if you request one — call the non-emergency line."},
+{g:"Exterior",id:"e11",t:"Tell the neighbours which vehicles belong",
+ d:"Cleaner, lawn crew, family member. Give them your number and tell them what would be worth waking you up for."},
+
+{g:"Money & paperwork",id:"a1",key:1,t:"Tell your homeowner's insurer the house will be unoccupied",
+ d:"Most policies contain a vacancy or unoccupancy clause, commonly at 30 or 60 days, that can cut or void coverage for water damage, vandalism and theft — precisely the things most likely to happen. Get written confirmation or a vacancy endorsement. Ask specifically whether military deployment is treated differently; some carriers are more generous about it."},
+{g:"Money & paperwork",id:"a2",key:1,t:"Move your two-factor codes off SMS to an authenticator app",
+ d:"The classic overseas failure: your bank, your Ecobee account or your insurer texts a code to a US number you cannot receive, and you are locked out of the exact tools you need. Fix this before you fly, not after."},
+{g:"Money & paperwork",id:"a3",t:"Put everything on autopay and check no card expires mid-deployment",
+ d:"Mortgage, all utilities, insurance, HOA, internet, alarm monitoring, lawn service. An expiring card silently kills the autopay and then the electricity, and then the air conditioning."},
+{g:"Money & paperwork",id:"a4",t:"Get a power of attorney for your family member",
+ d:"General or limited, depending on how much authority you want to hand over. Base legal will usually draw one up at no cost — do it before you are inside the deployment window."},
+{g:"Money & paperwork",id:"a5",t:"Look at what SCRA gets you",
+ d:"Interest rate caps, and termination rights on some leases and service contracts. Worth twenty minutes with base legal while you are there for the power of attorney."},
+{g:"Money & paperwork",id:"a6",key:1,t:"Brief your family member on the shutoffs, in person, with photos",
+ d:"Water main, gas shutoff, breaker panel, HVAC air handler and its drain pan, spare key, alarm code, wifi password. Take photos of each location on their phone while you are standing there. This is the thing that turns a flood into a puddle."},
+{g:"Money & paperwork",id:"a7",t:"Set a separate temporary alarm code for the cleaner",
+ d:"Its own code so you can see when it was used and cancel just that one when you get back."},
+{g:"Money & paperwork",id:"a8",t:"Fill in the Contacts tab and post a copy inside a kitchen cabinet",
+ d:"Whoever ends up dealing with a burst pipe at 2am will not have your phone."}
+];
+
+/* ========================================================================
+   CONTENT — recurring
+   ===================================================================== */
+/* every: interval in days | wd: fixed weekday (0=Sun) | off: days after departure to start */
+var RECUR=[
+{id:"r-hvac",tag:"hvac",every:3,off:1,who:"you",crit:1,
+ t:"Check the Ecobee",
+ d:"Indoor temperature within about 2°F of setpoint, humidity under 55%, no alerts waiting. If the temperature is creeping up day over day, the system is losing capacity or the condensate float has tripped — call the HVAC company that day, not next week."},
+
+{id:"r-car-tender",tag:"car",every:14,off:3,who:"family",crit:1,plan:"tender",
+ t:"Confirm the battery maintainer is still on",
+ d:"Someone looks at the charger and confirms it shows float or green, and that the outlet is still live. A maintainer that got unplugged is worse than no maintainer, because you stopped worrying about it."},
+{id:"r-car-drive",tag:"car",every:14,off:10,who:"family",crit:1,plan:"drive",
+ t:"Drive the car 20–30 minutes",
+ d:"Highway speed, not around the block, and not idling in the driveway — the alternator needs sustained engine speed and time to put back what six weeks of standby draw takes out. Check the tyres before setting off and look under the hood for nesting."},
+{id:"r-car-dis",tag:"car",every:28,off:14,who:"family",crit:0,plan:"disconnect",
+ t:"Look the car over",
+ d:"Terminal still disconnected and dry, no fluid on the floor, tyres holding pressure, no rodent nesting under the hood. Nothing to start."},
+
+{id:"r-lawn",tag:"lawn",wd:1,who:"lawn",crit:1,
+ t:"Lawn cut — confirm it happened",
+ d:"Photo from the crew, or a look from your family member or a camera. If a week is missed, chase it within 48 hours: an unkempt lawn is the clearest possible advertisement that nobody is home, and it is what draws the attention you do not want."},
+
+{id:"r-mail",tag:"sec",every:7,off:4,who:"family",crit:0,
+ t:"Collect the mail and clear the door",
+ d:"Mailbox emptied, flyers and door hangers off the porch, no packages sitting out."},
+
+{id:"r-clean",tag:"water",wd:4,who:"cleaner",crit:1,
+ t:"Cleaner's five-point walkthrough",
+ d:"Ask for these five specific things every visit: ceilings and walls checked for new stains, under every sink dry to the touch, no musty or sewer smell anywhere, air coming from the vents is cold, no insect activity. Text you a yes or no on each. Five minutes of their time, and it is your best early warning."},
+
+{id:"r-ext",tag:"sec",every:14,off:7,who:"friend",crit:0,
+ t:"Exterior walkaround",
+ d:"Roof looked at from the ground for lifted or missing shingles, no standing water against the foundation, garage and gates secure, all windows intact, nothing new in the yard."},
+
+{id:"r-drain",tag:"hvac",every:28,off:24,who:"any",crit:1,
+ t:"Flush the AC condensate line again",
+ d:"A cup of distilled vinegar down the cleanout. Thirty seconds of somebody's time, and it prevents the failure most likely to cost you a ceiling."},
+
+{id:"r-taps",tag:"water",every:28,off:20,who:"cleaner",crit:0,needsWater:1,
+ t:"Run every tap and flush every toilet",
+ d:"Thirty seconds per fixture. Refills the drain traps and moves the water in the pipes so it does not go stagnant."},
+
+{id:"r-sec",tag:"sec",every:7,off:2,who:"you",crit:0,
+ t:"Review cameras and confirm the alarm is armed",
+ d:"Check the system is still communicating, not just powered — a panel that lost its connection still shows lights."},
+
+{id:"r-pay",tag:"admin",every:28,off:26,who:"you",crit:1,
+ t:"Confirm the autopays actually posted",
+ d:"Mortgage, electricity, water, gas, internet, insurance, alarm, lawn service. A declined card is silent until the power goes off and takes the air conditioning with it."},
+
+{id:"r-bank",tag:"admin",every:14,off:8,who:"you",crit:0,
+ t:"Scan bank and card statements",
+ d:"Deployment is a common window for fraud to go unnoticed. Two minutes."}
+];
+
+var RET=[
+{id:"z1",key:1,t:"Look under the hood before you turn the key",
+ d:"Rodent nesting and chewed wiring. Then remove the maintainer or reconnect the negative terminal, check the fluids, and drive it properly rather than letting it idle."},
+{id:"z2",t:"Reset the tyre pressures to the door placard",d:"You took them up 3–5 PSI for storage."},
+{id:"z3",key:1,t:"Turn the water main back on slowly, then walk every fixture",
+ d:"Open it gradually to avoid a pressure surge, then check under every sink, behind the toilets, at the water heater and at the washing machine before you go to bed. Reopen the appliance valves you closed."},
+{id:"z4",t:"Water heater out of vacation mode",d:"Then run the hot water for a few minutes."},
+{id:"z5",t:"Flush every line for five minutes before drinking",d:"Water that has sat still for six weeks in the pipes should not be the water you make coffee with."},
+{id:"z6",t:"Check the freezer coin",d:"On top means the power held. At the bottom means everything in there thawed and refroze — throw it out."},
+{id:"z7",key:1,t:"Walk the ceilings and walls for stains before you unpack",
+ d:"Water damage found on day one is a very different claim from water damage found in week three. Look particularly at the ceiling under the air handler and under any upstairs bathroom."},
+{id:"z8",t:"Ecobee back to a normal schedule and a fresh filter",d:"Release the hold, restore the schedule, and turn Smart Home/Away back on."},
+{id:"z9",t:"Restore mail, deliveries and the newspaper",d:"Cancel the forward or hold and restart anything you paused."},
+{id:"z10",t:"Cancel the cleaner's temporary alarm code",d:"And check the access log while you are in there."},
+{id:"z11",t:"Tell your insurer you are back in the house",d:"Closes out the vacancy period on the record."},
+{id:"z12",t:"Restart the irrigation on its normal schedule",d:"And walk the zones to check nothing broke while it sat."}
+];
+
+var CONTACTS=["HVAC company","Plumber","Electrician","Roofer","Alarm monitoring","Insurance agent + policy no.","Electric utility","Water utility","Gas utility","Internet provider","Lawn service crew lead","Neighbour","Police non-emergency"];
+
+var WARNINGS=[
+{h:"Your insurance may not cover an empty house",
+ p:"Vacancy clauses typically start at 30 or 60 days and can void exactly the claims a vacant house generates. Confirm in writing before you fly."},
+{h:"The car battery is on a clock, not a schedule",
+ p:"Standby draw flattens a healthy battery in about four to seven weeks. Six weeks unattended is inside the failure window, so this needs a maintainer or a real driving plan — not good intentions."},
+{h:"A blocked condensate drain kills the AC in summer",
+ p:"It is the most common warm-weather failure and it takes the house to 95°F and 80% humidity within a day. Vinegar before you go, and again around week four."},
+{h:"Do not set the thermostat above 82°F to save money",
+ p:"The system stops running long enough to dehumidify, and mould starts on drywall, leather and books. The savings are a fraction of the remediation."},
+{h:"A mail hold runs out at 30 days",
+ p:"Your window is longer than that and holds cannot be stacked online. Forward it or have it collected weekly."},
+{h:"SMS two-factor will not reach you overseas",
+ p:"Move it to an authenticator app now, or you will be locked out of your bank and thermostat at the moment you need them."}
+];
+
+/* ========================================================================
+   STATE
+   ===================================================================== */
+var DEF={
+  cfg:{dep:"",ret:"",tz:"America/New_York",lawnDay:1,cleanDay:4,carPlan:"tender",
+       waterOff:false,fam:"",friend:"",cleaner:""},
+  done:{}, contacts:{}, tab:"board"
+};
+var restored=load();
+var state=restored||JSON.parse(JSON.stringify(DEF));
+if(!state.cfg) state.cfg=JSON.parse(JSON.stringify(DEF.cfg));
+if(!state.done) state.done={};
+if(!state.contacts) state.contacts={};
+for(var k in DEF.cfg){ if(!(k in state.cfg)) state.cfg[k]=DEF.cfg[k]; }
+/* data that came back from a previous session — the only real proof */
+sessionProven=!!restored;
+
+if(!state.cfg.dep){
+  var t0=fmtD(new Date());
+  state.cfg.dep=t0; state.cfg.ret=addDays(t0,60);
+}
+
+/* ========================================================================
+   SCHEDULE ENGINE
+   ===================================================================== */
+function activeRecur(){
+  return RECUR.filter(function(r){
+    if(r.plan && r.plan!==state.cfg.carPlan) return false;
+    if(r.needsWater && state.cfg.waterOff) return false;
+    return true;
+  });
+}
+function whoName(w){
+  var c=state.cfg;
+  if(w==="you") return "You";
+  if(w==="family") return c.fam||"Family member";
+  if(w==="friend") return c.friend||"Friend";
+  if(w==="cleaner") return c.cleaner||"Cleaner";
+  if(w==="lawn") return "Lawn crew";
+  return "Anyone on site";
+}
+/* every occurrence of every active recurring item, inside the window */
+function occurrences(){
+  var c=state.cfg, dep=c.dep, ret=c.ret, out=[];
+  if(!dep||!ret||diffDays(dep,ret)<0) return out;
+  activeRecur().forEach(function(r){
+    var d;
+    if(r.wd!==undefined){
+      var wd = (r.id==="r-lawn") ? +c.lawnDay : (r.id==="r-clean" ? +c.cleanDay : r.wd);
+      d=dep;
+      var guard=0;
+      while(dow(d)!==wd && guard++<8) d=addDays(d,1);
+      while(d<=ret){ out.push(mk(r,d)); d=addDays(d,7); }
+    }else{
+      d=addDays(dep,r.off||0);
+      var g2=0;
+      while(d<=ret && g2++<400){ out.push(mk(r,d)); d=addDays(d,r.every); }
+    }
+  });
+  out.sort(function(a,b){ return a.date<b.date?-1:a.date>b.date?1:(b.crit-a.crit); });
+  return out;
+}
+function mk(r,date){
+  return {rid:r.id, key:"rec:"+r.id+":"+date, date:date, tag:r.tag, t:r.t, d:r.d,
+          who:r.who, crit:r.crit, cadence:r.wd!==undefined?"weekly":("every "+r.every+" days")};
+}
+function statusOf(o,today){
+  if(state.done[o.key]) return "done";
+  var n=diffDays(today,o.date);
+  if(n<0) return "overdue";
+  if(n===0) return "today";
+  if(n<=3) return "soon";
+  return "later";
+}
+
+/* What actually needs doing right now.
+   A missed round on a 3-day cadence does not become twelve separate jobs — it
+   becomes one job you are late on. So overdue occurrences collapse to a single
+   row per task, carrying the count of rounds missed and the keys they stand for. */
+function liveItems(occ,today){
+  var g={}, order=[];
+  occ.forEach(function(o){
+    var s=statusOf(o,today);
+    if(s!=="overdue"&&s!=="today"&&s!=="soon") return;
+    if(!g[o.rid]){ g[o.rid]={over:[],today:null,soon:null}; order.push(o.rid); }
+    var b=g[o.rid];
+    if(s==="overdue") b.over.push(o);
+    else if(s==="today"){ if(!b.today) b.today=o; }
+    else if(!b.soon || o.date<b.soon.date) b.soon=o;
+  });
+  var out=order.map(function(rid){
+    var b=g[rid], over=b.over, primary, state;
+    if(b.today){ primary=b.today; state="today"; }
+    else if(over.length){
+      primary=over[0]; state="overdue";
+      over.forEach(function(o){ if(o.date>primary.date) primary=o; });
+    }
+    else{ primary=b.soon; state="soon"; }
+    var also=[];
+    over.forEach(function(o){ if(o.key!==primary.key) also.push(o.key); });
+    /* rounds already gone by unticked, beyond the one this row stands for */
+    var backlog = over.length - (state==="overdue"?1:0);
+    return {o:primary, state:state, backlog:backlog, also:also};
+  });
+  out.sort(function(a,b){
+    var rank={overdue:0,today:1,soon:2};
+    if(rank[a.state]!==rank[b.state]) return rank[a.state]-rank[b.state];
+    if(a.o.crit!==b.o.crit) return (b.o.crit||0)-(a.o.crit||0);
+    return a.o.date<b.o.date?-1:a.o.date>b.o.date?1:0;
+  });
+  return out;
+}
+
+/* ========================================================================
+   RENDER HELPERS
+   ===================================================================== */
+function el(tag,cls,txt){ var n=document.createElement(tag); if(cls)n.className=cls; if(txt!=null)n.textContent=txt; return n; }
+function pill(txt,cls){ return el("span","pill"+(cls?" "+cls:""),txt); }
+
+function taskRow(opts){
+  /* opts: key, title, detail, pills[], sev ('crit'|'warn'|'ok'|null) */
+  var done=!!state.done[opts.key];
+  var row=el("div","row"+(done?" done":"")+(opts.sev&&!done?" s-"+opts.sev:""));
+  row.appendChild(el("span","stripe"));
+  var b=el("button","chk"); b.type="button";
+  b.setAttribute("aria-pressed",done?"true":"false");
+  b.setAttribute("aria-label",(done?"Mark not done: ":"Mark done: ")+opts.title);
+  b.addEventListener("click",function(){
+    /* ticking a collapsed row clears the misses it stands for, too */
+    var keys=[opts.key].concat(opts.alsoKeys||[]);
+    var turningOn=!state.done[opts.key];
+    keys.forEach(function(k){ if(turningOn) state.done[k]=true; else delete state.done[k]; });
+    save(); render();
+  });
+  row.appendChild(b);
+  var body=el("div","body");
+  body.appendChild(el("div","t",opts.title));
+  if(opts.detail) body.appendChild(el("div","d",opts.detail));
+  if(opts.pills&&opts.pills.length){
+    var m=el("div","meta");
+    opts.pills.forEach(function(p){ if(p) m.appendChild(p); });
+    body.appendChild(m);
+  }
+  row.appendChild(body);
+  return row;
+}
+function sectionHead(title,eyebrow,count){
+  var h=el("div","shead");
+  var box=el("div");
+  if(eyebrow) box.appendChild(el("div","eyebrow",eyebrow));
+  box.appendChild(el("h2",null,title));
+  h.appendChild(box);
+  if(count) h.appendChild(el("span","ct",count));
+  return h;
+}
+
+/* ========================================================================
+   PANELS
+   ===================================================================== */
+function panelBoard(today){
+  var f=document.createDocumentFragment(), c=state.cfg;
+  var occ=occurrences();
+  var before=diffDays(today,c.dep)>0;
+
+  /* --- action list --- */
+  var live=liveItems(occ,today);
+
+  var s1=el("section");
+  s1.appendChild(sectionHead(before?"Nothing due yet — you leave "+labelFull(c.dep):"Needs attention","Watch list",
+              live.length?live.length+" open":""));
+  var rows=el("div","rows");
+  if(!live.length){
+    rows.appendChild(el("div","empty",before?
+      "The rounds start the day you leave. Work the Before you go list until then."
+      :"All clear. Nothing overdue and nothing due in the next three days."));
+  }
+  live.forEach(function(it){
+    var o=it.o, s=it.state, n=diffDays(today,o.date);
+    var sev = s==="overdue"?"crit" : s==="today"?"warn" : null;
+    var stamp = s==="overdue" ? (n===-1?"1 day late":(-n)+" days late")
+              : s==="today" ? "Due today"
+              : (n===1?"Tomorrow":"In "+n+" days");
+    rows.appendChild(taskRow({
+      key:o.key, alsoKeys:it.also, title:o.t, detail:o.d, sev:sev,
+      pills:[pill(stamp, s==="overdue"?"crit":s==="today"?"warn":null),
+             it.backlog>0?pill(it.backlog+(it.backlog===1?" earlier round missed":" earlier rounds missed"),"crit"):null,
+             pill(whoName(o.who)),
+             pill(label(o.date)),
+             o.crit?pill("Priority","key"):null]
+    }));
+  });
+  s1.appendChild(rows); f.appendChild(s1);
+
+  /* --- next 7 days --- */
+  var soon=occ.filter(function(o){
+    var n=diffDays(today,o.date);
+    return n>3 && n<=10 && !state.done[o.key];
+  });
+  if(soon.length){
+    var s2=el("section");
+    s2.appendChild(sectionHead("Coming up","Next ten days",soon.length+" items"));
+    var r2=el("div","rows");
+    soon.forEach(function(o){
+      r2.appendChild(taskRow({key:o.key,title:o.t,sev:null,
+        pills:[pill(labelFull(o.date)),pill(whoName(o.who)),pill(o.cadence)]}));
+    });
+    s2.appendChild(r2); f.appendChild(s2);
+  }
+
+  /* --- standing warnings --- */
+  var s3=el("section");
+  s3.appendChild(sectionHead("Things that bite people","Standing reminders",""));
+  s3.appendChild(el("p","note","These do not get ticked off. They are the failure modes that turn a six-week absence into a claim, and they are worth re-reading when you are tired."));
+  var w=el("div","warns");
+  WARNINGS.forEach(function(x){
+    var a=el("article");
+    a.appendChild(el("span","mk","!"));
+    var d=el("div");
+    d.appendChild(el("h3",null,x.h));
+    d.appendChild(el("p",null,x.p));
+    a.appendChild(d); w.appendChild(a);
+  });
+  s3.appendChild(w);
+
+  var tb=el("div","toolbar");
+  var b1=el("button","btn","Copy this week for your helpers"); b1.type="button";
+  b1.addEventListener("click",function(){ copyWeek(today,b1); });
+  var b2=el("button","btn",hasDownloads()?"Back up to a file":"Copy backup"); b2.type="button";
+  b2.addEventListener("click",function(){ backupNow(b2); });
+  var b3=el("button","btn","Restore from file"); b3.type="button";
+  b3.addEventListener("click",function(){ document.getElementById("restoreFile").click(); });
+  var b4=el("button","btn","Paste a backup"); b4.type="button";
+  b4.addEventListener("click",restoreFromPaste);
+  tb.appendChild(b1); tb.appendChild(b2); tb.appendChild(b3); tb.appendChild(b4);
+  s3.appendChild(tb);
+  f.appendChild(s3);
+  return f;
+}
+
+function panelPrep(){
+  var f=document.createDocumentFragment(), groups={}, order=[];
+  PREP.forEach(function(p){ if(!groups[p.g]){groups[p.g]=[];order.push(p.g);} groups[p.g].push(p); });
+  var intro=el("section");
+  intro.appendChild(sectionHead("Before you go","Pre-departure",""));
+  intro.appendChild(el("p","note","Ordered by what costs the most if you skip it. The starred items are the ones where a miss is expensive rather than annoying — do those first and work outward."));
+  f.appendChild(intro);
+  order.forEach(function(g){
+    var items=groups[g];
+    var done=items.filter(function(p){return state.done["prep:"+p.id];}).length;
+    var s=el("section");
+    s.appendChild(sectionHead(g,"",done+" of "+items.length));
+    var rows=el("div","rows");
+    items.forEach(function(p){
+      rows.appendChild(taskRow({key:"prep:"+p.id,title:p.t,detail:p.d,
+        sev:p.key?"crit":null, pills:p.key?[pill("Priority","key")]:[]}));
+    });
+    s.appendChild(rows); f.appendChild(s);
+  });
+  return f;
+}
+
+function panelAway(today){
+  var f=document.createDocumentFragment(), c=state.cfg;
+  var s=el("section");
+  s.appendChild(sectionHead("The rounds","While away",""));
+  s.appendChild(el("p","note","Each of these repeats on its own cadence for the whole "+
+    (diffDays(c.dep,c.ret)+1)+" days. Individual dates get ticked off on the Board tab as they come due."));
+  var rows=el("div","rows");
+  var occ=occurrences(), byId={};
+  occ.forEach(function(o){
+    if(!byId[o.rid]) byId[o.rid]={o:o,total:0,done:0,next:null};
+    byId[o.rid].total++;
+    if(state.done[o.key]) byId[o.rid].done++;
+    else if(!byId[o.rid].next && o.date>=today) byId[o.rid].next=o.date;
+  });
+  activeRecur().forEach(function(r){
+    var g=byId[r.id]; if(!g) return;
+    var row=el("div","row"+(r.crit?" s-warn":""));
+    row.appendChild(el("span","stripe"));
+    row.appendChild(el("span"));
+    var body=el("div","body");
+    body.appendChild(el("div","t",r.t));
+    body.appendChild(el("div","d",r.d));
+    var m=el("div","meta");
+    m.appendChild(pill(r.wd!==undefined?"Weekly":("Every "+r.every+" days")));
+    m.appendChild(pill(whoName(r.who)));
+    m.appendChild(pill(g.done+" of "+g.total+" done"));
+    if(g.next) m.appendChild(pill("Next "+label(g.next)));
+    if(r.crit) m.appendChild(pill("Priority","key"));
+    body.appendChild(m);
+    row.appendChild(body);
+    rows.appendChild(row);
+  });
+  s.appendChild(rows);
+  f.appendChild(s);
+
+  var s2=el("section");
+  s2.appendChild(sectionHead("If a named storm is forecast","Contingency",""));
+  s2.appendChild(el("p","note",
+    "Call "+whoName("family")+" and the lawn crew: everything loose into the garage, bins secured, grill valve closed, "+
+    "gutters clear at the downspouts. Confirm the Ecobee is reachable so you can tell whether the power held. "+
+    "If the power goes out for more than a day in this heat, the house will sit near outdoor temperature and humidity — "+
+    "someone needs to open it up and get air moving as soon as it is safe, or you will come home to mould."));
+  f.appendChild(s2);
+  return f;
+}
+
+function panelContacts(){
+  var f=document.createDocumentFragment();
+  var s=el("section");
+  s.appendChild(sectionHead("Who to call","Contacts",""));
+  s.appendChild(el("p","note","Fill these in before you leave and print a copy for the inside of a kitchen cabinet door. Whoever is standing in your flooded hallway will not have your phone."));
+  var sc=el("div","scroller");
+  var tbl=el("table","ctable");
+  var thead=el("thead"); var tr=el("tr");
+  tr.appendChild(el("th",null,"Role")); tr.appendChild(el("th",null,"Name and number"));
+  thead.appendChild(tr); tbl.appendChild(thead);
+  var tb=el("tbody");
+  CONTACTS.forEach(function(role){
+    var r=el("tr");
+    r.appendChild(el("td",null,role));
+    var td=el("td");
+    var inp=el("input","fld");
+    inp.value=state.contacts[role]||"";
+    inp.placeholder="—";
+    inp.setAttribute("aria-label",role);
+    inp.addEventListener("input",function(){ state.contacts[role]=inp.value; save(); });
+    td.appendChild(inp); r.appendChild(td); tb.appendChild(r);
+  });
+  tbl.appendChild(tb); sc.appendChild(tbl); s.appendChild(sc);
+  f.appendChild(s);
+
+  var s2=el("section");
+  s2.appendChild(sectionHead("Where things are","Brief your family member",""));
+  var sc2=el("div","scroller");
+  var t2=el("table","ctable"); var th2=el("thead"); var tr2=el("tr");
+  tr2.appendChild(el("th",null,"Item")); tr2.appendChild(el("th",null,"Location / code"));
+  th2.appendChild(tr2); t2.appendChild(th2);
+  var tb2=el("tbody");
+  ["Water main shutoff","Gas shutoff","Breaker panel","HVAC air handler","AC condensate cleanout",
+   "Spare key","Alarm code (yours)","Alarm code (cleaner)","Wifi network + password","Battery maintainer outlet",
+   "Irrigation controller","Insurance policy number"].forEach(function(role){
+    var r=el("tr"); r.appendChild(el("td",null,role));
+    var td=el("td"); var inp=el("input","fld");
+    inp.value=state.contacts[role]||""; inp.placeholder="—";
+    inp.setAttribute("aria-label",role);
+    inp.addEventListener("input",function(){ state.contacts[role]=inp.value; save(); });
+    td.appendChild(inp); r.appendChild(td); tb2.appendChild(r);
+  });
+  t2.appendChild(tb2); sc2.appendChild(t2); s2.appendChild(sc2);
+
+  var tb3=el("div","toolbar");
+  var cb=el("button","btn","Copy contact sheet"); cb.type="button";
+  cb.addEventListener("click",function(){
+    var lines=["HOUSE CONTACT SHEET",""];
+    CONTACTS.forEach(function(r){ lines.push(r+": "+(state.contacts[r]||"—")); });
+    lines.push("","WHERE THINGS ARE","");
+    ["Water main shutoff","Gas shutoff","Breaker panel","HVAC air handler","AC condensate cleanout",
+     "Spare key","Alarm code (yours)","Alarm code (cleaner)","Wifi network + password","Battery maintainer outlet",
+     "Irrigation controller","Insurance policy number"].forEach(function(r){
+      lines.push(r+": "+(state.contacts[r]||"—"));
+    });
+    copyText(lines.join("\n"),cb,"Contact sheet copied");
+  });
+  tb3.appendChild(cb); s2.appendChild(tb3);
+  f.appendChild(s2);
+  return f;
+}
+
+function panelReturn(){
+  var f=document.createDocumentFragment();
+  var s=el("section");
+  var done=RET.filter(function(p){return state.done["ret:"+p.id];}).length;
+  s.appendChild(sectionHead("Homecoming","First 24 hours back",done+" of "+RET.length));
+  s.appendChild(el("p","note","Do this before you unpack. Damage found on the first day is a straightforward insurance claim; the same damage found in week three is an argument."));
+  var rows=el("div","rows");
+  RET.forEach(function(p){
+    rows.appendChild(taskRow({key:"ret:"+p.id,title:p.t,detail:p.d,
+      sev:p.key?"crit":null,pills:p.key?[pill("Priority","key")]:[]}));
+  });
+  s.appendChild(rows); f.appendChild(s);
+  return f;
+}
+
+/* ========================================================================
+   TILES
+   ===================================================================== */
+function tileFor(tag,today,live,occ){
+  var mine=live.filter(function(it){ return it.o.tag===tag; });
+  var overdue=mine.filter(function(it){ return it.state==="overdue"; });
+  var dueToday=mine.filter(function(it){ return it.state==="today"; });
+  var next=null, all=occ.filter(function(o){ return o.tag===tag; });
+  for(var i=0;i<all.length;i++){
+    if(!state.done[all[i].key] && all[i].date>=today){ next=all[i]; break; }
+  }
+  if(overdue.length){
+    /* lateness of the most recent miss — that is the gap you are actually in */
+    var freshest=overdue[0].o.date;
+    overdue.forEach(function(it){ if(it.o.date>freshest) freshest=it.o.date; });
+    return {sev:"crit", val:overdue.length===1?"1 overdue":overdue.length+" overdue",
+            sub:(-diffDays(today,freshest))+"d late"};
+  }
+  if(dueToday.length) return {sev:"warn", val:"Due today", sub:dueToday[0].o.t.slice(0,26)};
+  if(next) return {sev:"ok", val:"On track", sub:"Next "+label(next.date)};
+  return {sev:"ok", val:"Complete", sub:"Nothing scheduled"};
+}
+
+/* ========================================================================
+   CLIPBOARD
+   ===================================================================== */
+function copyText(txt,btn,msg){
+  var old=btn.textContent;
+  function ok(){ btn.textContent=msg||"Copied"; setTimeout(function(){ btn.textContent=old; },1800); }
+  function fail(){ btn.textContent="Press Ctrl+C"; setTimeout(function(){ btn.textContent=old; },2200); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok,function(){ legacy(txt)?ok():fail(); });
+  }else{ legacy(txt)?ok():fail(); }
+}
+function legacy(txt){
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    var r=document.execCommand("copy"); document.body.removeChild(ta); return r;
+  }catch(e){ return false; }
+}
+/* A backup is the one copy no browser policy can evict. Saving it as a real
+   file needs the downloads capability; without it, the clipboard does the job. */
+function hasDownloads(){
+  if(window.claude&&window.claude.downloads) return true;
+  /* a self-hosted copy is top-level, so an ordinary download link works;
+     inside the artifact frame downloads are sandboxed off, hence the check */
+  return window.self===window.top && "download" in document.createElement("a");
+}
+function saveAsFile(name,data){
+  try{
+    var blob=new Blob([data],{type:"application/json"});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement("a");
+    a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+    return true;
+  }catch(e){ return false; }
+}
+
+function backupNow(btn){
+  var data=JSON.stringify(state,null,2);
+  var name="housewatch-"+houseToday()+".json";
+  if(window.claude&&window.claude.downloads){
+    window.claude.downloads.save({filename:name,data:data}).then(
+      function(){ flash(btn,"Backup saved"); },
+      function(err){
+        var code=err&&err.code;
+        if(code==="declined"||code==="rate_limited") flash(btn,"Not saved");
+        else copyText(data,btn,"Copied instead");
+      });
+    return;
+  }
+  if(hasDownloads()&&saveAsFile(name,data)){ flash(btn,"Backup saved"); return; }
+  copyText(data,btn,"Backup copied");
+}
+function flash(btn,msg){
+  var old=btn.textContent;
+  btn.textContent=msg;
+  setTimeout(function(){ btn.textContent=old; },1900);
+}
+
+function applyBackup(raw){
+  raw=String(raw||"").trim();
+  if(!raw) return;
+  var incoming=null;
+  try{ incoming=JSON.parse(raw); }catch(e){ incoming=null; }
+  if(!incoming||typeof incoming!=="object"||!incoming.cfg||!incoming.cfg.dep){
+    window.alert("That is not a House Watch backup. Pick the housewatch-....json file you saved with the Back up button.");
+    return;
+  }
+  state.cfg=incoming.cfg;
+  state.done=incoming.done||{};
+  state.contacts=incoming.contacts||{};
+  for(var k in DEF.cfg){ if(!(k in state.cfg)) state.cfg[k]=DEF.cfg[k]; }
+  var ok=save();
+  var d=document.getElementById("dlg");
+  if(d&&d.open) d.close();
+  render();
+  window.alert("Restored your dates, contacts and "+Object.keys(state.done).length+" ticked items."+
+    (ok?"":"\n\nNote: this browser is still blocking saving, so keep the backup file."));
+}
+function restoreFromPaste(){
+  var raw=window.prompt("Paste the backup text.");
+  if(raw!==null) applyBackup(raw);
+}
+
+function copyWeek(today,btn){
+  var occ=occurrences();
+  var items=liveItems(occ,today);
+  /* plus anything landing in the next week, so they can plan the trip */
+  occ.forEach(function(o){
+    var n=diffDays(today,o.date);
+    if(n>3 && n<=7 && !state.done[o.key]) items.push({o:o,state:"later",backlog:0,also:[]});
+  });
+  var lines=["House check-in, week of "+labelFull(today),""];
+  var groups={}, order=[];
+  items.forEach(function(it){
+    var w=whoName(it.o.who);
+    if(!groups[w]){ groups[w]=[]; order.push(w); }
+    groups[w].push(it);
+  });
+  order.forEach(function(w){
+    lines.push(w.toUpperCase());
+    groups[w].forEach(function(it){
+      var n=diffDays(today,it.o.date);
+      var when = n<0 ? (-n)+" days late" : n===0 ? "today" : labelFull(it.o.date);
+      lines.push("  - ["+when+"] "+it.o.t+(it.backlog>0?"  ("+it.backlog+" earlier rounds missed)":""));
+    });
+    lines.push("");
+  });
+  if(!items.length) lines.push("Nothing outstanding. Thank you.");
+  copyText(lines.join("\n"),btn,"Copied — paste into a text");
+}
+
+/* ========================================================================
+   HOME SCREEN ICON
+   The page <head> belongs to the host, so an icon has to be offered rather
+   than declared in the markup. Draw the mark to a canvas and hand iOS an
+   apple-touch-icon; if it declines, the Shortcuts route still works.
+   ===================================================================== */
+function buildIcon(size){
+  var cv=document.createElement("canvas");
+  cv.width=size; cv.height=size;
+  var g=cv.getContext("2d");
+  if(!g||!window.Path2D) return null;
+  g.fillStyle="#14150E"; g.fillRect(0,0,size,size);
+  var s=size/24*0.68;
+  g.translate((size-24*s)/2,(size-24*s)/2);
+  g.scale(s,s);
+  g.strokeStyle="#C2BC77"; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
+  g.stroke(new Path2D("M3.2 11.2 12 3.6l8.8 7.6"));
+  g.stroke(new Path2D("M5.6 11.9v8.5h12.8v-8.5"));
+  g.fillStyle="#5FB98B";
+  g.beginPath(); g.arc(12,16.1,2.4,0,Math.PI*2); g.fill();
+  return cv.toDataURL("image/png");
+}
+function installIcon(){
+  try{
+    /* a self-hosted copy ships real icon files in its <head> — don't fight it */
+    if(document.querySelector('link[rel="apple-touch-icon"]')) return;
+    var png=buildIcon(180);
+    if(!png) return;
+    /* apple-touch-icon only — the tab favicon is the host's to set */
+    ["apple-touch-icon","apple-touch-icon-precomposed"].forEach(function(rel){
+      var l=document.createElement("link");
+      l.setAttribute("rel",rel);
+      l.setAttribute("sizes","180x180");
+      l.setAttribute("href",png);
+      (document.head||document.documentElement).appendChild(l);
+    });
+  }catch(e){ /* icon is cosmetic; never let it break the board */ }
+}
+
+/* ========================================================================
+   MAIN RENDER
+   ===================================================================== */
+function render(){
+  var c=state.cfg, today=houseToday(), occ=occurrences(), live=liveItems(occ,today);
+
+  document.getElementById("clock").textContent=houseClock();
+
+  /* countdown */
+  var toDep=diffDays(today,c.dep), toRet=diffDays(today,c.ret);
+  var num,lab,sub;
+  if(toDep>0){ num=toDep; lab=toDep===1?"day until you leave":"days until you leave"; sub="Departing "+labelFull(c.dep); }
+  else if(toRet>=0){ num=toRet; lab=toRet===1?"day until you're home":"days until you're home";
+    sub="Day "+(diffDays(c.dep,today)+1)+" of "+(diffDays(c.dep,c.ret)+1)+" away"; }
+  else { num=0; lab="You're home"; sub="Work the Homecoming list"; }
+  document.getElementById("cdNum").textContent=num;
+  document.getElementById("cdLab").textContent=lab;
+  document.getElementById("cdSub").textContent=sub;
+
+  var total=diffDays(c.dep,c.ret)||1;
+  var elapsed=Math.min(Math.max(diffDays(c.dep,today),0),total);
+  document.getElementById("pFill").style.width=(elapsed/total*100).toFixed(1)+"%";
+  document.getElementById("tk1").textContent=label(c.dep);
+  document.getElementById("tk2").textContent=label(c.ret);
+
+  /* tiles */
+  var SEVWORD={ok:"on track",warn:"needs attention today",crit:"overdue"};
+  var worst="ok";
+  [["car","Car","Vehicle"],["lawn","Lawn","Lawn"],["hvac","Hvac","HVAC"]].forEach(function(p){
+    var t=tileFor(p[0],today,live,occ);
+    if(t.sev==="crit") worst="crit";
+    else if(t.sev==="warn"&&worst!=="crit") worst="warn";
+    var lamp=document.getElementById("lamp"+p[1]);
+    lamp.className="lamp"+(t.sev==="ok"?"":" "+t.sev);
+    document.getElementById("val"+p[1]).textContent=t.val;
+    document.getElementById("sub"+p[1]).textContent=t.sub;
+    lamp.closest(".tile").setAttribute("aria-label",
+      p[2]+": "+SEVWORD[t.sev]+". "+t.val+(t.sub?", "+t.sub:"")+". Opens the rounds.");
+  });
+  document.getElementById("mark").setAttribute("class","mark"+(worst==="ok"?"":" "+worst));
+
+  /* nav badges */
+  var openNow=live.filter(function(it){ return it.state==="overdue"||it.state==="today"; }).length;
+  document.getElementById("nBoard").textContent=openNow?"● "+openNow:"";
+  var prepLeft=PREP.length-PREP.filter(function(p){return state.done["prep:"+p.id];}).length;
+  document.getElementById("nPrep").textContent=(prepLeft&&toDep>=0)?"● "+prepLeft:"";
+
+  /* tabs */
+  var tabs=document.querySelectorAll("#nav button");
+  for(var i=0;i<tabs.length;i++) tabs[i].setAttribute("aria-selected", tabs[i].dataset.tab===state.tab?"true":"false");
+
+  var host=document.getElementById("panels");
+  host.textContent="";
+  if(state.tab==="board") host.appendChild(panelBoard(today));
+  else if(state.tab==="prep") host.appendChild(panelPrep());
+  else if(state.tab==="away") host.appendChild(panelAway(today));
+  else if(state.tab==="contacts") host.appendChild(panelContacts());
+  else host.appendChild(panelReturn());
+}
+
+/* ========================================================================
+   WIRING
+   ===================================================================== */
+document.getElementById("nav").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-tab]"); if(!b) return;
+  state.tab=b.dataset.tab; save(); render(); window.scrollTo(0,0);
+});
+document.querySelectorAll(".tile").forEach(function(t){
+  t.addEventListener("click",function(){ state.tab="away"; save(); render(); window.scrollTo(0,0); });
+});
+
+/* settings dialog */
+var dlg=document.getElementById("dlg");
+["sLawn","sClean"].forEach(function(id){
+  var sel=document.getElementById(id);
+  DAYNAMES.forEach(function(n,i){ var o=document.createElement("option"); o.value=i; o.textContent=n; sel.appendChild(o); });
+});
+var CARHINT={
+  tender:"Best option. Nobody has to remember anything, and it is the only plan that reliably survives six weeks.",
+  drive:"Workable, but it depends on somebody showing up every fortnight and driving properly, not idling.",
+  disconnect:"The battery survives, but so does nothing else — your alarm and any remote features go dark with it."
+};
+document.getElementById("sCar").addEventListener("change",function(){
+  document.getElementById("carHint").textContent=CARHINT[this.value];
+});
+function openDlg(){
+  var c=state.cfg;
+  document.getElementById("sDep").value=c.dep;
+  document.getElementById("sRet").value=c.ret;
+  document.getElementById("sTz").value=c.tz;
+  document.getElementById("sLawn").value=c.lawnDay;
+  document.getElementById("sClean").value=c.cleanDay;
+  document.getElementById("sCar").value=c.carPlan;
+  document.getElementById("carHint").textContent=CARHINT[c.carPlan];
+  document.getElementById("sWater").checked=!!c.waterOff;
+  document.getElementById("sFam").value=c.fam;
+  document.getElementById("sFriend").value=c.friend;
+  document.getElementById("sName").value=c.cleaner;
+  dlg.showModal();
+}
+document.getElementById("restoreFile").addEventListener("change",function(){
+  var f=this.files&&this.files[0];
+  this.value="";
+  if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){ applyBackup(rd.result); };
+  rd.onerror=function(){ window.alert("Could not read that file. Try Paste a backup instead."); };
+  rd.readAsText(f);
+});
+document.getElementById("dlgRestoreFile").addEventListener("click",function(){
+  document.getElementById("restoreFile").click();
+});
+document.getElementById("dlgRestorePaste").addEventListener("click",restoreFromPaste);
+document.getElementById("saveState").addEventListener("click",function(){
+  if(storeOK&&!sessionProven){
+    window.alert("Saving looks like it is working, but it is not proven yet.\n\nFinish Setup, then "+
+      "fully close this browser and open the link again. If your dates are still there, you are set "+
+      "for the whole deployment and this turns green.\n\nIf they are gone, this browser will not "+
+      "keep them — keep a backup and use Restore from file each time you open it.");
+    return;
+  }
+  if(storeOK) return;
+  var b=this;
+  unlockStore(function(ok){
+    if(ok){ save(); render(); }
+    else window.alert("This browser will not grant the page storage. Your entries still work for "+
+      "this visit, but they will be gone when you close it.\n\nUse "+
+      (hasDownloads()?"Back up to a file":"Copy backup")+" on the Board tab, keep it somewhere "+
+      "safe, and restore it next time you open this.");
+  });
+});
+document.getElementById("btnSet").addEventListener("click",openDlg);
+document.getElementById("dlgClose").addEventListener("click",function(){ dlg.close(); });
+document.getElementById("dlgSave").addEventListener("click",function(){
+  var c=state.cfg;
+  c.dep=document.getElementById("sDep").value||c.dep;
+  c.ret=document.getElementById("sRet").value||c.ret;
+  if(diffDays(c.dep,c.ret)<1) c.ret=addDays(c.dep,60);
+  c.tz=document.getElementById("sTz").value;
+  c.lawnDay=+document.getElementById("sLawn").value;
+  c.cleanDay=+document.getElementById("sClean").value;
+  c.carPlan=document.getElementById("sCar").value;
+  c.waterOff=document.getElementById("sWater").checked;
+  c.fam=document.getElementById("sFam").value.trim();
+  c.friend=document.getElementById("sFriend").value.trim();
+  c.cleaner=document.getElementById("sName").value.trim();
+  save(); dlg.close(); render();
+});
+document.getElementById("dlgReset").addEventListener("click",function(){
+  if(!window.confirm("Clear every tick on every list? Your dates and contacts are kept.")) return;
+  state.done={}; save(); dlg.close(); render();
+});
+
+/* keep the clock and "today" honest across long sessions */
+setInterval(function(){
+  document.getElementById("clock").textContent=houseClock();
+},60000);
+var lastDay=null;
+setInterval(function(){
+  var d=houseToday();
+  if(lastDay&&d!==lastDay) render();
+  lastDay=d;
+},60000);
+
+installIcon();
+paintSaveState();
+render();
+/* only on a genuinely fresh start — never nag someone who already set this up */
+if(!restored) setTimeout(openDlg,350);
+</script>
+</body>
+</html>
