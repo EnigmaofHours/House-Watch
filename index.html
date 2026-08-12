@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>House Watch — Deployment Standing Orders</title>
+<title>House Watch</title>
 <meta name="description" content="Watch board for a house left empty during a deployment.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EAE9E0">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14150E">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#E7EFF6">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B1620">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="House Watch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,46 +29,46 @@
 <style>
 /* ============================ TOKENS ============================ */
 :root{
-  --bg:#EAE9E0; --surface:#F4F3EC; --raised:#DFDDD1; --sunken:#E1DFD3;
-  --ink:#1B1C15; --ink-2:#5C5E50; --ink-3:#8A8C7B;
-  --line:#D1CFC1; --line-2:#BCB9A8;
-  --brass:#7A7742; --brass-soft:#A8A472;
-  --ok:#2C6E4B;   --ok-bg:#DCE8DF;
-  --warn:#95610F; --warn-bg:#F0E5CB;
-  --crit:#A93524; --crit-bg:#F1DBD6;
-  --shadow:0 1px 0 rgba(27,28,21,.06);
+  --bg:#E7EFF6; --surface:#F5F9FC; --raised:#D6E3EF; --sunken:#DCE7F1;
+  --ink:#0F2130; --ink-2:#48627A; --ink-3:#7B93A9;
+  --line:#C8D9E7; --line-2:#ABC3D6;
+  --accent:#2C6E9E; --accent-soft:#7FADD1;
+  --ok:#1F7A52;   --ok-bg:#D5E9DE;
+  --warn:#8F5D0C; --warn-bg:#F4E6C9;
+  --crit:#AE382A; --crit-bg:#F4DCD7;
+  --shadow:0 1px 0 rgba(15,33,48,.06);
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#14150E; --surface:#1D1F16; --raised:#262819; --sunken:#101109;
-    --ink:#E9E8DB; --ink-2:#A5A695; --ink-3:#7B7D6C;
-    --line:#2E3122; --line-2:#3E4130;
-    --brass:#C2BC77; --brass-soft:#8E8A53;
-    --ok:#5FB98B;   --ok-bg:#16301F;
-    --warn:#E0A84A; --warn-bg:#332710;
-    --crit:#E77A66; --crit-bg:#351B16;
-    --shadow:0 1px 0 rgba(0,0,0,.3);
+    --bg:#0B1620; --surface:#13222E; --raised:#1C2E3D; --sunken:#071019;
+    --ink:#E1ECF5; --ink-2:#9CB3C6; --ink-3:#71889C;
+    --line:#20323F; --line-2:#2F4759;
+    --accent:#7FBAE4; --accent-soft:#4A7EA5;
+    --ok:#4FBF8B;   --ok-bg:#0F2C20;
+    --warn:#E2A94C; --warn-bg:#30250F;
+    --crit:#EE7C68; --crit-bg:#331A15;
+    --shadow:0 1px 0 rgba(0,0,0,.34);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#14150E; --surface:#1D1F16; --raised:#262819; --sunken:#101109;
-  --ink:#E9E8DB; --ink-2:#A5A695; --ink-3:#7B7D6C;
-  --line:#2E3122; --line-2:#3E4130;
-  --brass:#C2BC77; --brass-soft:#8E8A53;
-  --ok:#5FB98B;   --ok-bg:#16301F;
-  --warn:#E0A84A; --warn-bg:#332710;
-  --crit:#E77A66; --crit-bg:#351B16;
-  --shadow:0 1px 0 rgba(0,0,0,.3);
+  --bg:#0B1620; --surface:#13222E; --raised:#1C2E3D; --sunken:#071019;
+  --ink:#E1ECF5; --ink-2:#9CB3C6; --ink-3:#71889C;
+  --line:#20323F; --line-2:#2F4759;
+  --accent:#7FBAE4; --accent-soft:#4A7EA5;
+  --ok:#4FBF8B;   --ok-bg:#0F2C20;
+  --warn:#E2A94C; --warn-bg:#30250F;
+  --crit:#EE7C68; --crit-bg:#331A15;
+  --shadow:0 1px 0 rgba(0,0,0,.34);
 }
 :root[data-theme="light"]{
-  --bg:#EAE9E0; --surface:#F4F3EC; --raised:#DFDDD1; --sunken:#E1DFD3;
-  --ink:#1B1C15; --ink-2:#5C5E50; --ink-3:#8A8C7B;
-  --line:#D1CFC1; --line-2:#BCB9A8;
-  --brass:#7A7742; --brass-soft:#A8A472;
-  --ok:#2C6E4B;   --ok-bg:#DCE8DF;
-  --warn:#95610F; --warn-bg:#F0E5CB;
-  --crit:#A93524; --crit-bg:#F1DBD6;
-  --shadow:0 1px 0 rgba(27,28,21,.06);
+  --bg:#E7EFF6; --surface:#F5F9FC; --raised:#D6E3EF; --sunken:#DCE7F1;
+  --ink:#0F2130; --ink-2:#48627A; --ink-3:#7B93A9;
+  --line:#C8D9E7; --line-2:#ABC3D6;
+  --accent:#2C6E9E; --accent-soft:#7FADD1;
+  --ok:#1F7A52;   --ok-bg:#D5E9DE;
+  --warn:#8F5D0C; --warn-bg:#F4E6C9;
+  --crit:#AE382A; --crit-bg:#F4DCD7;
+  --shadow:0 1px 0 rgba(15,33,48,.06);
 }
 
 :root{
@@ -87,7 +87,7 @@ body{
 h1,h2,h3{margin:0; font-weight:600; text-wrap:balance}
 p{margin:0}
 button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
-:focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:2px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
 .mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
 .eyebrow{
   font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
@@ -105,12 +105,12 @@ header{
 }
 .brand{
   font-family:var(--mono); font-size:11px; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--brass); font-weight:600;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
   display:inline-flex; align-items:center; gap:7px;
 }
 /* the mark's window is a status lamp — same language as the tiles */
 .mark{width:18px; height:18px; flex:none}
-.mark .shell{fill:none; stroke:var(--brass); stroke-width:1.9; stroke-linejoin:round; stroke-linecap:round}
+.mark .shell{fill:none; stroke:var(--accent); stroke-width:1.9; stroke-linejoin:round; stroke-linecap:round}
 .mark .lens{fill:var(--ok)}
 .mark.warn .lens{fill:var(--warn)}
 .mark.crit .lens{fill:var(--crit)}
@@ -120,7 +120,7 @@ header{
   font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--ink-2); border:1px solid var(--line-2); padding:3px 8px; border-radius:2px;
 }
-.iconbtn:hover{color:var(--ink); border-color:var(--brass)}
+.iconbtn:hover{color:var(--ink); border-color:var(--accent)}
 .savestate{
   font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
   padding:3px 7px; border-radius:2px; border:1px solid transparent; white-space:nowrap;
@@ -146,7 +146,7 @@ header{
   max-width:760px; margin:0 auto; padding:0 14px 10px;
 }
 .track .rail{height:3px; background:var(--sunken); border:1px solid var(--line); position:relative}
-.track .fill{position:absolute; inset:0 auto 0 0; background:var(--brass-soft)}
+.track .fill{position:absolute; inset:0 auto 0 0; background:var(--accent-soft)}
 .track .ticks{
   display:flex; justify-content:space-between; margin-top:5px;
   font-family:var(--mono); font-size:10px; color:var(--ink-3);
@@ -159,7 +159,7 @@ header{
   padding:9px 9px 10px; display:flex; flex-direction:column; gap:6px; text-align:left;
   box-shadow:var(--shadow);
 }
-.tile:hover{border-color:var(--brass-soft)}
+.tile:hover{border-color:var(--accent-soft)}
 .tile .top{display:flex; align-items:center; gap:6px}
 .lamp{
   width:9px; height:9px; border-radius:50%; flex:none;
@@ -182,7 +182,7 @@ nav button{
   font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
   padding:9px 9px 8px; color:var(--ink-3); border-bottom:2px solid transparent; white-space:nowrap;
 }
-nav button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--brass)}
+nav button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--accent)}
 nav button .n{
   font-size:9.5px; color:var(--crit); margin-left:4px; letter-spacing:0;
 }
@@ -216,7 +216,7 @@ section{margin-top:26px}
   width:19px; height:19px; margin-top:1px; border:1.5px solid var(--line-2); border-radius:2px;
   display:flex; align-items:center; justify-content:center; flex:none; background:var(--surface);
 }
-.chk:hover{border-color:var(--brass)}
+.chk:hover{border-color:var(--accent)}
 .chk[aria-pressed="true"]{background:var(--ok); border-color:var(--ok)}
 .chk[aria-pressed="true"]::after{
   content:""; width:9px; height:5px; border-left:2px solid var(--bg); border-bottom:2px solid var(--bg);
@@ -239,7 +239,7 @@ section{margin-top:26px}
 .pill.crit{background:var(--crit-bg); border-color:transparent; color:var(--crit); font-weight:600}
 .pill.warn{background:var(--warn-bg); border-color:transparent; color:var(--warn); font-weight:600}
 .pill.ok{background:var(--ok-bg); border-color:transparent; color:var(--ok); font-weight:600}
-.pill.key{border-color:var(--brass-soft); color:var(--brass)}
+.pill.key{border-color:var(--accent-soft); color:var(--accent)}
 
 /* ============================ STANDING WARNINGS ============================ */
 .warns{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
@@ -264,7 +264,7 @@ section{margin-top:26px}
   font:inherit; font-size:13.5px; width:100%; background:transparent; color:var(--ink);
   border:none; border-bottom:1px dashed var(--line-2); padding:2px 0;
 }
-.fld:focus{outline:none; border-bottom-color:var(--brass); border-bottom-style:solid}
+.fld:focus{outline:none; border-bottom-color:var(--accent); border-bottom-style:solid}
 .fld::placeholder{color:var(--ink-3); opacity:.7}
 .scroller{overflow-x:auto}
 
@@ -288,13 +288,45 @@ dialog::backdrop{background:rgba(20,21,14,.55)}
 }
 .f .hint{font-size:11.5px; color:var(--ink-3); line-height:1.4}
 .f2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.resume{
-  background:var(--bg); border:1px solid var(--line-2); border-left:3px solid var(--brass);
-  border-radius:2px; padding:10px 11px;
+/* per-week scheduling */
+.sched-head{display:flex; align-items:center; gap:8px}
+.sched-head label{flex:1}
+.quickday{
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  background:var(--bg); color:var(--ink-2); border:1px solid var(--line-2); border-radius:2px;
+  padding:3px 5px; width:auto;
 }
-.resume-row{display:flex; gap:7px; flex-wrap:wrap; margin:2px 0 4px}
+.weeks{
+  display:flex; flex-direction:column; gap:1px; margin:5px 0 4px;
+  background:var(--line); border:1px solid var(--line-2); border-radius:2px; overflow:hidden;
+  max-height:224px; overflow-y:auto;
+}
+.wk{display:flex; align-items:center; gap:8px; background:var(--surface); padding:5px 8px}
+.wk .n{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); width:52px; flex:none;
+}
+.wk .span{font-family:var(--mono); font-size:10px; color:var(--ink-3); flex:1; white-space:nowrap}
+.wk input[type="date"]{
+  font-family:var(--mono); font-size:12px; padding:3px 5px; width:auto; flex:none;
+  background:var(--bg); border:1px solid var(--line-2); border-radius:2px; color:var(--ink);
+}
+.wk.off input[type="date"]{opacity:.5}
+
+/* keyholders */
+.keys{display:flex; flex-direction:column; gap:6px; margin:5px 0 7px}
+.keyrow{display:flex; gap:6px; align-items:center}
+.keyrow input{flex:1 1 90px; min-width:0}
+.keyrow select{flex:0 1 128px; width:auto}
+.keyrow .del{
+  flex:none; width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line-2); border-radius:2px; color:var(--ink-3); font-size:15px; line-height:1;
+}
+.keyrow .del:hover{color:var(--crit); border-color:var(--crit)}
+.addkey{align-self:flex-start}
+.addkey[disabled]{opacity:.4; cursor:not-allowed}
 .toggle{display:flex; align-items:flex-start; gap:9px; cursor:pointer}
-.toggle input{margin-top:3px; accent-color:var(--brass); width:16px; height:16px; flex:none}
+.toggle input{margin-top:3px; accent-color:var(--accent); width:16px; height:16px; flex:none}
 .toggle span{font-size:13.5px; line-height:1.4}
 .toggle small{display:block; color:var(--ink-3); font-size:11.5px; line-height:1.4; margin-top:2px}
 .dlg-f{
@@ -305,8 +337,8 @@ dialog::backdrop{background:rgba(20,21,14,.55)}
   font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
   padding:8px 13px; border-radius:2px; border:1px solid var(--line-2); color:var(--ink-2);
 }
-.btn:hover{border-color:var(--brass); color:var(--ink)}
-.btn.pri{background:var(--brass); border-color:var(--brass); color:var(--bg); font-weight:600}
+.btn:hover{border-color:var(--accent); color:var(--ink)}
+.btn.pri{background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:600}
 .btn.pri:hover{opacity:.9; color:var(--bg)}
 
 /* ============================ MISC ============================ */
@@ -410,15 +442,6 @@ footer{
 <dialog id="dlg">
   <div class="dlg-h"><h2>Setup</h2><span style="flex:1"></span><button class="btn" id="dlgClose" type="button">Close</button></div>
   <div class="dlg-b">
-    <div class="f resume">
-      <label>Been here before?</label>
-      <div class="resume-row">
-        <button class="btn" id="dlgRestoreFile" type="button">Restore from file</button>
-        <button class="btn" id="dlgRestorePaste" type="button">Paste a backup</button>
-      </div>
-      <span class="hint">Brings back your dates, contacts and every tick in one step — faster than
-        filling this in again.</span>
-    </div>
     <div class="f2">
       <div class="f"><label for="sDep">Departure</label><input type="date" id="sDep"></div>
       <div class="f"><label for="sRet">Return</label><input type="date" id="sRet"></div>
@@ -436,27 +459,42 @@ footer{
       </select>
       <span class="hint">Due dates follow the house, so you're never a day off from overseas.</span>
     </div>
-    <div class="f2">
-      <div class="f"><label for="sLawn">Mowing day</label><select id="sLawn"></select></div>
-      <div class="f"><label for="sClean">Cleaner's day</label><select id="sClean"></select></div>
+    <div class="f">
+      <div class="sched-head">
+        <label>Mowing days</label>
+        <select class="quickday" id="qLawn" aria-label="Set every mowing week to this weekday"></select>
+      </div>
+      <div class="weeks" id="wkLawn"></div>
+      <span class="hint">One date per week of your absence, each limited to that week. Leave a week
+        blank if there is no cut.</span>
     </div>
     <div class="f">
-      <label>Vehicle plan</label>
+      <div class="sched-head">
+        <label>Cleaning days</label>
+        <select class="quickday" id="qClean" aria-label="Set every cleaning week to this weekday"></select>
+      </div>
+      <div class="weeks" id="wkClean"></div>
+      <span class="hint">Set the usual weekday from the menu, then change any single week that differs.</span>
+    </div>
+    <div class="f">
+      <label for="sCar">Vehicle location</label>
       <select id="sCar">
-        <option value="tender">Battery maintainer on the car</option>
-        <option value="drive">Someone drives it every 2 weeks</option>
-        <option value="disconnect">Negative terminal disconnected</option>
+        <option value="garage">In the garage</option>
+        <option value="driveway">On the driveway</option>
+        <option value="street">On the street</option>
+        <option value="storage">Off-site storage or a friend's</option>
+        <option value="none">No vehicle left behind</option>
       </select>
       <span class="hint" id="carHint"></span>
     </div>
     <label class="toggle"><input type="checkbox" id="sWater">
       <span>Water main shut off at the street<small>Turns off the "run every faucet" rounds and adds valve steps to homecoming.</small></span></label>
     <div class="f">
-      <label for="sName">Who's checking on the house</label>
-      <div class="f2" style="margin-top:2px">
-        <input id="sFam" placeholder="Family member"><input id="sFriend" placeholder="Friend">
-      </div>
-      <input id="sName" placeholder="House cleaner" style="margin-top:8px">
+      <label>Who has house keys</label>
+      <div class="keys" id="keyRows"></div>
+      <button class="btn addkey" id="addKey" type="button">Add a keyholder</button>
+      <span class="hint">Up to five. The role decides who each round is assigned to, and the list
+        doubles as your record of who could get in while you were away.</span>
     </div>
   </div>
   <div class="dlg-f">
@@ -723,15 +761,12 @@ var RECUR=[
  t:"Check the Ecobee",
  d:"Indoor temperature within about 2°F of setpoint, humidity under 55%, no alerts waiting. If the temperature is creeping up day over day, the system is losing capacity or the condensate float has tripped — call the HVAC company that day, not next week."},
 
-{id:"r-car-tender",tag:"car",every:14,off:3,who:"family",crit:1,plan:"tender",
- t:"Confirm the battery maintainer is still on",
- d:"Someone looks at the charger and confirms it shows float or green, and that the outlet is still live. A maintainer that got unplugged is worse than no maintainer, because you stopped worrying about it."},
-{id:"r-car-drive",tag:"car",every:14,off:10,who:"family",crit:1,plan:"drive",
- t:"Drive the car 20–30 minutes",
- d:"Highway speed, not around the block, and not idling in the driveway — the alternator needs sustained engine speed and time to put back what six weeks of standby draw takes out. Check the tyres before setting off and look under the hood for nesting."},
-{id:"r-car-dis",tag:"car",every:28,off:14,who:"family",crit:0,plan:"disconnect",
- t:"Look the car over",
- d:"Terminal still disconnected and dry, no fluid on the floor, tyres holding pressure, no rodent nesting under the hood. Nothing to start."},
+{id:"r-car-drive",tag:"car",every:14,off:10,who:"family",crit:1,
+ t:"Run the car for 20–30 minutes",
+ d:"Highway speed, not around the block, and not idling on the driveway — the alternator needs sustained engine speed and time to put back what a fortnight of standby draw takes out. Check the tyres before setting off and look under the bonnet for nesting. If a battery maintainer is fitted, this visit is just to confirm it still shows green and the outlet is live."},
+{id:"r-car-look",tag:"car",every:28,off:20,who:"family",crit:0,
+ t:"Look the car over where it sits",
+ d:"No fluid pooling underneath, tyres holding pressure, glass and panels intact, nothing nesting in the engine bay. The Board tab carries the extra checks for wherever yours is parked."},
 
 {id:"r-lawn",tag:"lawn",wd:1,who:"lawn",crit:1,
  t:"Lawn cut — confirm it happened",
@@ -809,10 +844,14 @@ var WARNINGS=[
    STATE
    ===================================================================== */
 var DEF={
-  cfg:{dep:"",ret:"",tz:"America/New_York",lawnDay:1,cleanDay:4,carPlan:"tender",
-       waterOff:false,fam:"",friend:"",cleaner:""},
+  cfg:{dep:"",ret:"",tz:"America/New_York",
+       lawnDates:[], cleanDates:[],      /* one date per week, "" for a skipped week */
+       lawnDay:1, cleanDay:4,            /* the usual weekday, used to seed the grids */
+       carLoc:"garage", waterOff:false,
+       keys:[]},                         /* [{name, role}] — role drives round assignment */
   done:{}, contacts:{}, tab:"board"
 };
+var ROLES=[["cleaner","House cleaner"],["friend","Friend"],["family","Family"],["other","Other"]];
 var restored=load();
 var state=restored||JSON.parse(JSON.stringify(DEF));
 if(!state.cfg) state.cfg=JSON.parse(JSON.stringify(DEF.cfg));
@@ -826,24 +865,74 @@ if(!state.cfg.dep){
   var t0=fmtD(new Date());
   state.cfg.dep=t0; state.cfg.ret=addDays(t0,60);
 }
+/* carry a v1 config forward rather than making anyone set it up twice */
+(function migrate(){
+  var c=state.cfg;
+  if(c.carPlan&&!c.carLoc){ c.carLoc="garage"; delete c.carPlan; }
+  if(c.fam||c.friend||c.cleaner){
+    c.keys=c.keys&&c.keys.length?c.keys:[];
+    if(c.cleaner) c.keys.push({name:c.cleaner,role:"cleaner"});
+    if(c.friend)  c.keys.push({name:c.friend, role:"friend"});
+    if(c.fam)     c.keys.push({name:c.fam,    role:"family"});
+    delete c.fam; delete c.friend; delete c.cleaner;
+  }
+  if(!Array.isArray(c.keys)) c.keys=[];
+  if(!Array.isArray(c.lawnDates)) c.lawnDates=[];
+  if(!Array.isArray(c.cleanDates)) c.cleanDates=[];
+})();
+
+/* Fill a schedule grid from a weekday, keeping any date already chosen. */
+function seedSchedule(list,weekday,keepExisting){
+  var wks=weeksOf(), out=[];
+  wks.forEach(function(w,i){
+    if(keepExisting&&list[i]!==undefined&&list[i]!==null){ out.push(list[i]); return; }
+    var d=w[0], guard=0;
+    while(dow(d)!==weekday && guard++<7) d=addDays(d,1);
+    out.push(d>w[1]?"":d);
+  });
+  return out;
+}
+if(!state.cfg.lawnDates.length)  state.cfg.lawnDates =seedSchedule([],+state.cfg.lawnDay,false);
+if(!state.cfg.cleanDates.length) state.cfg.cleanDates=seedSchedule([],+state.cfg.cleanDay,false);
 
 /* ========================================================================
    SCHEDULE ENGINE
    ===================================================================== */
 function activeRecur(){
   return RECUR.filter(function(r){
-    if(r.plan && r.plan!==state.cfg.carPlan) return false;
+    if(r.tag==="car" && state.cfg.carLoc==="none") return false;
     if(r.needsWater && state.cfg.waterOff) return false;
     return true;
   });
 }
+/* Weeks of the absence, as [start,end] date pairs — the frame the mowing and
+   cleaning grids are built on, so a date can never land outside your dates. */
+function weeksOf(){
+  var c=state.cfg, out=[];
+  if(!c.dep||!c.ret||diffDays(c.dep,c.ret)<0) return out;
+  var d=c.dep, guard=0;
+  while(d<=c.ret && guard++<60){
+    var end=addDays(d,6);
+    if(end>c.ret) end=c.ret;
+    out.push([d,end]);
+    d=addDays(d,7);
+  }
+  return out;
+}
+function schedFor(id){
+  return id==="r-lawn" ? (state.cfg.lawnDates||[]) : (state.cfg.cleanDates||[]);
+}
+/* First keyholder holding the role a round is addressed to. */
 function whoName(w){
-  var c=state.cfg;
+  var keys=state.cfg.keys||[];
   if(w==="you") return "You";
-  if(w==="family") return c.fam||"Family member";
-  if(w==="friend") return c.friend||"Friend";
-  if(w==="cleaner") return c.cleaner||"Cleaner";
   if(w==="lawn") return "Lawn crew";
+  for(var i=0;i<keys.length;i++){
+    if(keys[i].role===w && keys[i].name) return keys[i].name;
+  }
+  if(w==="family") return "Family";
+  if(w==="friend") return "Friend";
+  if(w==="cleaner") return "House cleaner";
   return "Anyone on site";
 }
 /* every occurrence of every active recurring item, inside the window */
@@ -853,11 +942,10 @@ function occurrences(){
   activeRecur().forEach(function(r){
     var d;
     if(r.wd!==undefined){
-      var wd = (r.id==="r-lawn") ? +c.lawnDay : (r.id==="r-clean" ? +c.cleanDay : r.wd);
-      d=dep;
-      var guard=0;
-      while(dow(d)!==wd && guard++<8) d=addDays(d,1);
-      while(d<=ret){ out.push(mk(r,d)); d=addDays(d,7); }
+      /* mowing and cleaning run off their explicit per-week dates */
+      schedFor(r.id).forEach(function(day){
+        if(day && day>=dep && day<=ret) out.push(mk(r,day));
+      });
     }else{
       d=addDays(dep,r.off||0);
       var g2=0;
@@ -1014,6 +1102,16 @@ function panelBoard(today){
     s2.appendChild(r2); f.appendChild(s2);
   }
 
+  /* --- where the car is --- */
+  if(c.carLoc&&c.carLoc!=="none"){
+    var LOCNAME={garage:"In the garage",driveway:"On the driveway",street:"On the street",
+                 storage:"Off-site storage"};
+    var sv=el("section");
+    sv.appendChild(sectionHead(LOCNAME[c.carLoc]||"Vehicle","Where the car is",""));
+    sv.appendChild(el("p","note",(typeof LOCHINT!=="undefined"&&LOCHINT[c.carLoc])||""));
+    f.appendChild(sv);
+  }
+
   /* --- standing warnings --- */
   var s3=el("section");
   s3.appendChild(sectionHead("Things that bite people","Standing reminders",""));
@@ -1104,7 +1202,7 @@ function panelAway(today){
   var s2=el("section");
   s2.appendChild(sectionHead("If a named storm is forecast","Contingency",""));
   s2.appendChild(el("p","note",
-    "Call "+whoName("family")+" and the lawn crew: everything loose into the garage, bins secured, grill valve closed, "+
+    "Call your keyholders and the lawn crew: everything loose into the garage, bins secured, grill valve closed, "+
     "gutters clear at the downspouts. Confirm the Ecobee is reachable so you can tell whether the power held. "+
     "If the power goes out for more than a day in this heat, the house will sit near outdoor temperature and humidity — "+
     "someone needs to open it up and get air moving as soon as it is safe, or you will come home to mould."));
@@ -1337,11 +1435,11 @@ function buildIcon(size){
   cv.width=size; cv.height=size;
   var g=cv.getContext("2d");
   if(!g||!window.Path2D) return null;
-  g.fillStyle="#14150E"; g.fillRect(0,0,size,size);
+  g.fillStyle="#0B1620"; g.fillRect(0,0,size,size);
   var s=size/24*0.68;
   g.translate((size-24*s)/2,(size-24*s)/2);
   g.scale(s,s);
-  g.strokeStyle="#C2BC77"; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
+  g.strokeStyle="#7FBAE4"; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
   g.stroke(new Path2D("M3.2 11.2 12 3.6l8.8 7.6"));
   g.stroke(new Path2D("M5.6 11.9v8.5h12.8v-8.5"));
   g.fillStyle="#5FB98B";
@@ -1438,31 +1536,121 @@ document.querySelectorAll(".tile").forEach(function(t){
 
 /* settings dialog */
 var dlg=document.getElementById("dlg");
-["sLawn","sClean"].forEach(function(id){
+
+["qLawn","qClean"].forEach(function(id){
   var sel=document.getElementById(id);
-  DAYNAMES.forEach(function(n,i){ var o=document.createElement("option"); o.value=i; o.textContent=n; sel.appendChild(o); });
+  DAYNAMES.forEach(function(n,i){
+    var o=document.createElement("option");
+    o.value=i; o.textContent=n.slice(0,3);
+    sel.appendChild(o);
+  });
 });
-var CARHINT={
-  tender:"Best option. Nobody has to remember anything, and it is the only plan that reliably survives six weeks.",
-  drive:"Workable, but it depends on somebody showing up every fortnight and driving properly, not idling.",
-  disconnect:"The battery survives, but so does nothing else — your alarm and any remote features go dark with it."
+
+var LOCHINT={
+  garage:"Best case. Out of the sun and hail, but check for rodent nesting — a warm engine bay in a quiet garage is exactly where they move in.",
+  driveway:"Fine, but it advertises the house. Ask a keyholder to move it a few feet occasionally so it never looks abandoned.",
+  street:"Highest risk. Add street sweeping and permit rules to your reminders, and check for tickets, tows and broken glass on every visit.",
+  storage:"Lowest worry, but confirm who can get it out in an emergency and that the facility has your contact details that work overseas.",
+  none:"No vehicle rounds will be scheduled."
 };
 document.getElementById("sCar").addEventListener("change",function(){
-  document.getElementById("carHint").textContent=CARHINT[this.value];
+  document.getElementById("carHint").textContent=LOCHINT[this.value]||"";
 });
+
+/* ---- per-week schedule grids ---- */
+function drawWeeks(hostId,list){
+  var host=document.getElementById(hostId);
+  host.textContent="";
+  var wks=weeksOf();
+  wks.forEach(function(w,i){
+    var row=el("div","wk");
+    row.appendChild(el("span","n","Week "+(i+1)));
+    row.appendChild(el("span","span",label(w[0])+" – "+label(w[1])));
+    var inp=document.createElement("input");
+    inp.type="date"; inp.min=w[0]; inp.max=w[1];
+    inp.value=list[i]||"";
+    inp.setAttribute("aria-label","Week "+(i+1)+", "+label(w[0])+" to "+label(w[1]));
+    inp.addEventListener("change",function(){
+      list[i]=inp.value||"";
+      row.className="wk"+(inp.value?"":" off");
+    });
+    if(!inp.value) row.className="wk off";
+    row.appendChild(inp);
+    host.appendChild(row);
+  });
+  if(!wks.length) host.appendChild(el("div","wk","Set your dates first."));
+}
+function wireQuickDay(selId,hostId,which){
+  document.getElementById(selId).addEventListener("change",function(){
+    var wd=+this.value;
+    state.cfg[which]=seedSchedule(state.cfg[which]||[],wd,false);
+    drawWeeks(hostId,state.cfg[which]);
+  });
+}
+wireQuickDay("qLawn","wkLawn","lawnDates");
+wireQuickDay("qClean","wkClean","cleanDates");
+
+/* ---- keyholders ---- */
+function drawKeys(){
+  var host=document.getElementById("keyRows"), keys=state.cfg.keys||[];
+  host.textContent="";
+  keys.forEach(function(k,i){
+    var row=el("div","keyrow");
+    var name=document.createElement("input");
+    name.type="text"; name.value=k.name||""; name.placeholder="Name";
+    name.setAttribute("aria-label","Keyholder "+(i+1)+" name");
+    name.addEventListener("input",function(){ k.name=name.value; });
+    var role=document.createElement("select");
+    role.setAttribute("aria-label","Keyholder "+(i+1)+" role");
+    ROLES.forEach(function(r){
+      var o=document.createElement("option"); o.value=r[0]; o.textContent=r[1]; role.appendChild(o);
+    });
+    role.value=k.role||"other";
+    role.addEventListener("change",function(){ k.role=role.value; });
+    var del=el("button","del","×"); del.type="button";
+    del.setAttribute("aria-label","Remove keyholder "+(i+1));
+    del.addEventListener("click",function(){ keys.splice(i,1); drawKeys(); });
+    row.appendChild(name); row.appendChild(role); row.appendChild(del);
+    host.appendChild(row);
+  });
+  document.getElementById("addKey").disabled = keys.length>=5;
+}
+document.getElementById("addKey").addEventListener("click",function(){
+  var keys=state.cfg.keys||(state.cfg.keys=[]);
+  if(keys.length>=5) return;
+  keys.push({name:"",role:"other"});
+  drawKeys();
+  var rows=document.querySelectorAll("#keyRows .keyrow input");
+  if(rows.length) rows[rows.length-1].focus();
+});
+
+function refreshWeekGrids(){
+  var c=state.cfg;
+  c.lawnDates =seedSchedule(c.lawnDates||[], +c.lawnDay,  true);
+  c.cleanDates=seedSchedule(c.cleanDates||[],+c.cleanDay, true);
+  drawWeeks("wkLawn",c.lawnDates);
+  drawWeeks("wkClean",c.cleanDates);
+}
+["sDep","sRet"].forEach(function(id){
+  document.getElementById(id).addEventListener("change",function(){
+    var c=state.cfg;
+    var dep=document.getElementById("sDep").value, ret=document.getElementById("sRet").value;
+    if(dep&&ret&&diffDays(dep,ret)>=1){ c.dep=dep; c.ret=ret; refreshWeekGrids(); }
+  });
+});
+
 function openDlg(){
   var c=state.cfg;
   document.getElementById("sDep").value=c.dep;
   document.getElementById("sRet").value=c.ret;
   document.getElementById("sTz").value=c.tz;
-  document.getElementById("sLawn").value=c.lawnDay;
-  document.getElementById("sClean").value=c.cleanDay;
-  document.getElementById("sCar").value=c.carPlan;
-  document.getElementById("carHint").textContent=CARHINT[c.carPlan];
+  document.getElementById("qLawn").value=c.lawnDay;
+  document.getElementById("qClean").value=c.cleanDay;
+  document.getElementById("sCar").value=c.carLoc||"garage";
+  document.getElementById("carHint").textContent=LOCHINT[c.carLoc||"garage"];
   document.getElementById("sWater").checked=!!c.waterOff;
-  document.getElementById("sFam").value=c.fam;
-  document.getElementById("sFriend").value=c.friend;
-  document.getElementById("sName").value=c.cleaner;
+  refreshWeekGrids();
+  drawKeys();
   dlg.showModal();
 }
 document.getElementById("restoreFile").addEventListener("change",function(){
@@ -1474,10 +1662,6 @@ document.getElementById("restoreFile").addEventListener("change",function(){
   rd.onerror=function(){ window.alert("Could not read that file. Try Paste a backup instead."); };
   rd.readAsText(f);
 });
-document.getElementById("dlgRestoreFile").addEventListener("click",function(){
-  document.getElementById("restoreFile").click();
-});
-document.getElementById("dlgRestorePaste").addEventListener("click",restoreFromPaste);
 document.getElementById("saveState").addEventListener("click",function(){
   if(storeOK&&!sessionProven){
     window.alert("Saving looks like it is working, but it is not proven yet.\n\nFinish Setup, then "+
@@ -1504,13 +1688,15 @@ document.getElementById("dlgSave").addEventListener("click",function(){
   c.ret=document.getElementById("sRet").value||c.ret;
   if(diffDays(c.dep,c.ret)<1) c.ret=addDays(c.dep,60);
   c.tz=document.getElementById("sTz").value;
-  c.lawnDay=+document.getElementById("sLawn").value;
-  c.cleanDay=+document.getElementById("sClean").value;
-  c.carPlan=document.getElementById("sCar").value;
+  c.lawnDay=+document.getElementById("qLawn").value;
+  c.cleanDay=+document.getElementById("qClean").value;
+  c.carLoc=document.getElementById("sCar").value;
   c.waterOff=document.getElementById("sWater").checked;
-  c.fam=document.getElementById("sFam").value.trim();
-  c.friend=document.getElementById("sFriend").value.trim();
-  c.cleaner=document.getElementById("sName").value.trim();
+  /* trim the grids to the window in case the dates moved, and drop blank keyholders */
+  c.lawnDates =seedSchedule(c.lawnDates||[], +c.lawnDay,  true);
+  c.cleanDates=seedSchedule(c.cleanDates||[],+c.cleanDay, true);
+  c.keys=(c.keys||[]).filter(function(k){ return k.name&&k.name.trim(); })
+                     .map(function(k){ return {name:k.name.trim(),role:k.role||"other"}; });
   save(); dlg.close(); render();
 });
 document.getElementById("dlgReset").addEventListener("click",function(){
