@@ -1573,19 +1573,40 @@ function copyWeek(today,btn){
    than declared in the markup. Draw the mark to a canvas and hand iOS an
    apple-touch-icon; if it declines, the Shortcuts route still works.
    ===================================================================== */
+/* Stars-and-stripes ground with the house on a blue roundel. The roundel is
+   what makes it work at 40px on a home screen — a stroked outline laid
+   straight over stripes turns to mush, but white on solid blue holds. */
+var FLAG={red:"#B31942", white:"#FFFFFF", blue:"#0A3161", lamp:"#5FB98B"};
+
 function buildIcon(size){
   var cv=document.createElement("canvas");
   cv.width=size; cv.height=size;
   var g=cv.getContext("2d");
   if(!g||!window.Path2D) return null;
-  g.fillStyle="#0B1620"; g.fillRect(0,0,size,size);
-  var s=size/24*0.68;
+
+  /* seven stripes, red first and last so the edges of the tile read red */
+  var bands=7, h=size/bands;
+  for(var i=0;i<bands;i++){
+    g.fillStyle = (i%2===0) ? FLAG.red : FLAG.white;
+    /* ceil the last band so rounding never leaves a hairline at the bottom */
+    g.fillRect(0, i*h, size, (i===bands-1) ? size-i*h : Math.ceil(h)+1);
+  }
+
+  /* roundel: a white ring so the blue never sits directly on a red stripe */
+  var cx=size/2, cy=size/2;
+  g.fillStyle=FLAG.white;
+  g.beginPath(); g.arc(cx,cy,size*0.425,0,Math.PI*2); g.fill();
+  g.fillStyle=FLAG.blue;
+  g.beginPath(); g.arc(cx,cy,size*0.385,0,Math.PI*2); g.fill();
+
+  /* the mark itself, unchanged apart from its colours */
+  var s=size/24*0.60;
   g.translate((size-24*s)/2,(size-24*s)/2);
   g.scale(s,s);
-  g.strokeStyle="#7FBAE4"; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
+  g.strokeStyle=FLAG.white; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
   g.stroke(new Path2D("M3.2 11.2 12 3.6l8.8 7.6"));
   g.stroke(new Path2D("M5.6 11.9v8.5h12.8v-8.5"));
-  g.fillStyle="#5FB98B";
+  g.fillStyle=FLAG.lamp;
   g.beginPath(); g.arc(12,16.1,2.4,0,Math.PI*2); g.fill();
   return cv.toDataURL("image/png");
 }
@@ -1673,6 +1694,7 @@ function wxTakeCurrent(j){
   WX.now={
     temp:Math.round(c.temperature_2m),
     feels:Math.round(wxNum(c.apparent_temperature,c.temperature_2m)),
+    hum:typeof c.relative_humidity_2m==="number"?Math.round(c.relative_humidity_2m):null,
     code:wxNum(c.weather_code,-1),
     at:Date.now()
   };
@@ -1779,10 +1801,14 @@ function wxPaint(){
       slot.textContent="";
       slot.appendChild(el("span","t",n.temp+"°F"));
       var word=WXWORD[n.code]||"";
+      if(n.hum!=null) slot.appendChild(document.createTextNode(" · "+n.hum+"% RH"));
       var tail=Math.abs(n.feels-n.temp)>=3 ? "feels "+n.feels+"°" : word;
       if(tail) slot.appendChild(document.createTextNode(" · "+tail));
-      slot.title=(word?word+", ":"")+n.temp+"°F, feels "+n.feels+"°F — ZIP "+WX.zip+
-                 ", read at "+wxStamp(n.at);
+      /* say "outside" out loud — the HVAC round talks about indoor humidity,
+         and these are two different numbers */
+      slot.title=(word?word+", ":"")+"outside the house: "+n.temp+"°F, feels "+n.feels+"°F"+
+                 (n.hum!=null?", "+n.hum+"% relative humidity":"")+
+                 " — ZIP "+WX.zip+", read at "+wxStamp(n.at);
       slot.hidden=false;
     }else{
       slot.hidden=true;
@@ -1838,7 +1864,7 @@ function wxRefresh(force){
   }
 
   wxGet("https://api.open-meteo.com/v1/forecast?latitude="+WX.lat+"&longitude="+WX.lon+
-        "&current=temperature_2m,apparent_temperature,weather_code"+
+        "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code"+
         "&hourly=temperature_2m,apparent_temperature,weather_code,precipitation"+
         "&forecast_days=3&temperature_unit=fahrenheit&precipitation_unit=inch"+
         "&timeformat=unixtime",
