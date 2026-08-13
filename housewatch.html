@@ -82,12 +82,12 @@ header{
   text-transform:uppercase; color:var(--accent); font-weight:600;
   display:inline-flex; align-items:center; gap:7px;
 }
-/* the mark's window is a status lamp — same language as the tiles */
-.mark{width:18px; height:18px; flex:none}
+/* the ring around the house carries the status the lamp used to */
+.mark{width:19px; height:19px; flex:none}
 .mark .shell{fill:none; stroke:var(--accent); stroke-width:1.9; stroke-linejoin:round; stroke-linecap:round}
-.mark .lens{fill:var(--ok)}
-.mark.warn .lens{fill:var(--warn)}
-.mark.crit .lens{fill:var(--crit)}
+.mark .ring{fill:none; stroke:var(--accent); stroke-width:1.5}
+.mark.warn .ring,.mark.warn .shell{stroke:var(--warn)}
+.mark.crit .ring,.mark.crit .shell{stroke:var(--crit)}
 .hbar .spacer{flex:1}
 .clock{font-family:var(--mono); font-size:11px; color:var(--ink-3); font-variant-numeric:tabular-nums}
 /* time and live conditions share the corner — the reading sits under the clock */
@@ -97,6 +97,13 @@ header{
   font-variant-numeric:tabular-nums; white-space:nowrap;
 }
 .wxnow .t{color:var(--ink-2); font-weight:600}
+/* what to hold the thermostat at, given what it is doing outside */
+.wxset{
+  font-family:var(--mono); font-size:11px; color:var(--accent);
+  font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600;
+}
+.wxset .lb{color:var(--ink-3); font-weight:400; letter-spacing:.08em}
+.wxset .why{color:var(--ink-3); font-weight:400}
 .iconbtn{
   font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--ink-2); border:1px solid var(--line-2); padding:3px 8px; border-radius:2px;
@@ -426,9 +433,11 @@ footer{
   <div class="hbar">
     <span class="brand">
       <svg class="mark" id="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path class="shell" d="M3.2 11.2 12 3.6l8.8 7.6"></path>
-        <path class="shell" d="M5.6 11.9v8.5h12.8v-8.5"></path>
-        <circle class="lens" cx="12" cy="16.1" r="2.4"></circle>
+        <circle class="ring" cx="12" cy="12" r="11"></circle>
+        <g transform="translate(12,12) scale(.84) translate(-12,-12)">
+          <path class="shell" d="M3.2 11.2 12 3.6l8.8 7.6"></path>
+          <path class="shell" d="M5.6 11.9v8.5h12.8v-8.5"></path>
+        </g>
       </svg>
       House Watch
     </span>
@@ -436,6 +445,7 @@ footer{
     <span class="hstat">
       <span class="clock" id="clock"></span>
       <span class="wxnow" id="wxNow" hidden></span>
+      <span class="wxset" id="wxSet" hidden></span>
     </span>
     <button class="savestate" id="saveState" type="button"></button>
     <button class="iconbtn" id="btnSet">Setup</button>
@@ -488,8 +498,8 @@ footer{
     <button role="tab" data-tab="board" aria-selected="true">Board<span class="n" id="nBoard"></span></button>
     <button role="tab" data-tab="prep" aria-selected="false">Before you go<span class="n" id="nPrep"></span></button>
     <button role="tab" data-tab="away" aria-selected="false">While away</button>
-    <button role="tab" data-tab="contacts" aria-selected="false">Contacts</button>
     <button role="tab" data-tab="return" aria-selected="false">Homecoming</button>
+    <button role="tab" data-tab="contacts" aria-selected="false">Contacts</button>
   </nav>
 
   <div id="panels"></div>
@@ -497,7 +507,7 @@ footer{
   <footer>
     Everything you tick is stored in this browser only, and opening the link on another device
     starts fresh. The single exception is weather: the page asks Open-Meteo and the National
-    Weather Service about ZIP 23455 every quarter hour. Nothing about you or your device goes with
+    Weather Service about the ZIP code you set in Setup, every quarter hour. Nothing about you or your device goes with
     that question, and the board works without it. The indicator at the top says whether saving is
     working; if it reads <strong>Not saving</strong>, tap it, and treat anything you enter after that
     as good for this visit only. Dates are calculated in the house's time zone, not yours.
@@ -523,6 +533,11 @@ footer{
         <option value="Pacific/Honolulu">Hawaii</option>
       </select>
       <span class="hint">Due dates follow the house, so you're never a day off from overseas.</span>
+    </div>
+    <div class="f">
+      <label for="sZip">House ZIP code</label>
+      <input type="text" id="sZip" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="23455" autocomplete="postal-code">
+      <span class="hint" id="zipHint"></span>
     </div>
     <div class="f">
       <div class="sched-head">
@@ -795,7 +810,7 @@ var PREP=[
 {g:"Exterior",id:"e9",t:"Lock away the ladders",
  d:"A ladder left beside the house is an invitation to a second-floor window."},
 {g:"Exterior",id:"e10",t:"Tell the alarm company and ask the police for vacation checks",
- d:"Give the alarm company your dates and the names of everyone authorised to be there. Many police departments will do free vacation house checks if you request one — call the non-emergency line."},
+ d:"Give the alarm company your dates and the names of everyone authorised to be there. Many police departments will do free vacation house checks if you request one."},
 {g:"Exterior",id:"e11",t:"Tell the neighbours which vehicles belong",
  d:"Cleaner, lawn crew, family member. Give them your number and tell them what would be worth waking you up for."},
 
@@ -888,7 +903,18 @@ var RET=[
 {id:"z12",t:"Restart the irrigation on its normal schedule",d:"And walk the zones to check nothing broke while it sat."}
 ];
 
-var CONTACTS=["HVAC company","Plumber","Electrician","Roofer","Alarm monitoring","Insurance agent + policy no.","Electric utility","Water utility","Gas utility","Internet provider","Lawn service crew lead","Neighbour","Police non-emergency"];
+/* The three failures that are decided in the first day. Kept together on the
+   While away tab, because that is where you will be when one of them lands. */
+var CONTINGENCY=[
+{h:"A named storm is forecast",
+ p:"Call your keyholders and the lawn crew: everything loose into the garage, bins secured, grill valve closed, gutters clear at the downspouts. Confirm the Ecobee is reachable beforehand so that afterwards its silence tells you something. Fill the car's tank if it is staying — fuel queues after a landfall are long, and a keyholder may need to reach the house."},
+{h:"The power has been out for more than a day",
+ p:"The thermostat going quiet looks identical to a failed router, so treat silence as an outage until a person confirms otherwise — ask a keyholder to look at the house, not at the app. When it comes back: the freezer coin tells you whether everything thawed, and anything in the fridge past four hours goes out regardless of how it looks. Check the air conditioner actually restarted rather than tripping a breaker on the surge, and that the alarm and cameras came back on their own. A closed house that sat at outdoor temperature and humidity for two days will start mould on drywall, leather and books within the week — get someone in to open it up and move air as soon as it is safe. That is the damage that outlasts the outage."},
+{h:"The air conditioning has stopped completely",
+ p:"Different from a blocked drain, which trips a float switch and can be cleared: the system will not restart at all. In this climate the clock is short — an empty, closed house reaches outdoor temperature and humidity in about a day and mould follows within the week, so this is worth an emergency call-out rather than the next available appointment. Call the HVAC company from the Contacts tab, and give a keyholder written authority to let them in and approve the repair up to a figure you name, so nobody is waiting on your time zone. Until it is running, ask someone to set any dehumidifier you own draining to a hose and open the interior and closet doors."}
+];
+
+var CONTACTS=["HVAC company","Plumber","Electrician","Roofer","Alarm monitoring","Insurance agent + policy no.","Electric utility","Water utility","Gas utility","Internet provider","Lawn service crew lead","Neighbour"];
 
 var WARNINGS=[
 {h:"Your insurance may not cover an empty house",
@@ -912,6 +938,7 @@ var DEF={
   cfg:{dep:"",ret:"",tz:"America/New_York",
        lawnDates:[], cleanDates:[],      /* one date per week, "" for a skipped week */
        lawnDay:1, cleanDay:4,            /* seed weekday only — the grids are the real schedule */
+       zip:"23455", lat:36.8863, lon:-76.1497, place:"Virginia Beach VA",
        carLoc:"garage", waterOff:false, mailOff:false,
        keys:[]},                         /* [{name, role, phone}] — role drives round assignment */
   done:{}, contacts:{}, tab:"board",
@@ -1372,12 +1399,19 @@ function panelAway(today){
   f.appendChild(s);
 
   var s2=el("section");
-  s2.appendChild(sectionHead("If a named storm is forecast","Contingency",""));
-  s2.appendChild(el("p","note",
-    "Call your keyholders and the lawn crew: everything loose into the garage, bins secured, grill valve closed, "+
-    "gutters clear at the downspouts. Confirm the Ecobee is reachable so you can tell whether the power held. "+
-    "If the power goes out for more than a day in this heat, the house will sit near outdoor temperature and humidity — "+
-    "someone needs to open it up and get air moving as soon as it is safe, or you will come home to mould."));
+  s2.appendChild(sectionHead("If something goes wrong","Contingencies",""));
+  s2.appendChild(el("p","note","These do not get ticked off. All three are decided in the "+
+    "first day, and the first day is the one where you are furthest away."));
+  var cw=el("div","warns");
+  CONTINGENCY.forEach(function(x){
+    var a=el("article");
+    a.appendChild(el("span","mk","!"));
+    var d=el("div");
+    d.appendChild(el("h3",null,x.h));
+    d.appendChild(el("p",null,x.p));
+    a.appendChild(d); cw.appendChild(a);
+  });
+  s2.appendChild(cw);
   f.appendChild(s2);
   return f;
 }
@@ -1470,12 +1504,12 @@ function mailTile(today,live,occ){
   if(state.cfg.mailOff) return {sev:"ok", val:"Paused", sub:"Hold or forward in place"};
 
   var mine=occ.filter(function(o){ return o.tag==="mail"; });
-  var over=live.filter(function(it){ return it.o.tag==="mail" && it.state==="overdue"; });
+  var over=live.filter(function(it){ return it.o.tag==="mail" && (it.state==="overdue"||it.backlog>0); });
   if(over.length){
-    var freshest=over[0].o.date;
-    over.forEach(function(it){ if(it.o.date>freshest) freshest=it.o.date; });
-    return {sev:"crit", val:over.length===1?"1 pickup missed":over.length+" pickups missed",
-            sub:(-diffDays(today,freshest))+"d late"};
+    var rounds=0;
+    over.forEach(function(it){ rounds += (it.state==="overdue"?1:0)+(it.backlog||0); });
+    return {sev:"crit", val:rounds===1?"1 pickup missed":rounds+" pickups missed",
+            sub:missedSub(over,today)};
   }
 
   var wks=weeksOf(), wk=null;
@@ -1499,21 +1533,33 @@ function mailTile(today,live,occ){
   return {sev:"ok", val:"Complete", sub:"Nothing scheduled"};
 }
 
+/* "3d late" when there is a genuinely past date to name; otherwise the count
+   of rounds sitting behind a job that happens to be due today. */
+function missedSub(groups,today){
+  var freshest=null, rounds=0;
+  groups.forEach(function(it){
+    rounds += (it.state==="overdue"?1:0)+(it.backlog||0);
+    if(it.state==="overdue" && (!freshest||it.o.date>freshest)) freshest=it.o.date;
+  });
+  if(freshest) return (-diffDays(today,freshest))+"d late";
+  return rounds+(rounds===1?" round missed":" rounds missed");
+}
+
 function tileFor(tag,today,live,occ){
   if(tag==="mail") return mailTile(today,live,occ);
   var mine=live.filter(function(it){ return it.o.tag===tag; });
-  var overdue=mine.filter(function(it){ return it.state==="overdue"; });
+  /* A round coming due today does not cancel the ones already missed behind
+     it — liveItems folds those into `backlog`, and a tile that ignored them
+     went amber on a day you were four checks late. */
+  var overdue=mine.filter(function(it){ return it.state==="overdue"||it.backlog>0; });
   var dueToday=mine.filter(function(it){ return it.state==="today"; });
   var next=null, all=occ.filter(function(o){ return o.tag===tag; });
   for(var i=0;i<all.length;i++){
     if(!state.done[all[i].key] && all[i].date>=today){ next=all[i]; break; }
   }
   if(overdue.length){
-    /* lateness of the most recent miss — that is the gap you are actually in */
-    var freshest=overdue[0].o.date;
-    overdue.forEach(function(it){ if(it.o.date>freshest) freshest=it.o.date; });
     return {sev:"crit", val:overdue.length===1?"1 overdue":overdue.length+" overdue",
-            sub:(-diffDays(today,freshest))+"d late"};
+            sub:missedSub(overdue,today)};
   }
   if(dueToday.length) return {sev:"warn", val:"Due today", sub:dueToday[0].o.t.slice(0,26)};
   if(next) return {sev:"ok", val:"On track", sub:"Next "+label(next.date)};
@@ -1576,7 +1622,7 @@ function copyWeek(today,btn){
 /* Stars-and-stripes ground with the house on a blue roundel. The roundel is
    what makes it work at 40px on a home screen — a stroked outline laid
    straight over stripes turns to mush, but white on solid blue holds. */
-var FLAG={red:"#B31942", white:"#FFFFFF", blue:"#0A3161", lamp:"#5FB98B"};
+var FLAG={red:"#B31942", white:"#FFFFFF", blue:"#0A3161"};
 
 function buildIcon(size){
   var cv=document.createElement("canvas");
@@ -1599,15 +1645,13 @@ function buildIcon(size){
   g.fillStyle=FLAG.blue;
   g.beginPath(); g.arc(cx,cy,size*0.385,0,Math.PI*2); g.fill();
 
-  /* the mark itself, unchanged apart from its colours */
+  /* the house outline alone — no lamp on the icon */
   var s=size/24*0.60;
   g.translate((size-24*s)/2,(size-24*s)/2);
   g.scale(s,s);
   g.strokeStyle=FLAG.white; g.lineWidth=1.9; g.lineJoin="round"; g.lineCap="round";
   g.stroke(new Path2D("M3.2 11.2 12 3.6l8.8 7.6"));
   g.stroke(new Path2D("M5.6 11.9v8.5h12.8v-8.5"));
-  g.fillStyle=FLAG.lamp;
-  g.beginPath(); g.arc(12,16.1,2.4,0,Math.PI*2); g.fill();
   return cv.toDataURL("image/png");
 }
 function installIcon(){
@@ -1638,12 +1682,28 @@ function installIcon(){
    falls back to the last one and the alert strip simply stays empty.
    ===================================================================== */
 var WX={
-  zip:"23455", lat:36.8863, lon:-76.1497,   /* Virginia Beach, VA */
   HOURS:48,                                 /* how far ahead an alert may look */
   EVERY:15*60*1000,                         /* refresh no more often than this */
   STALE:3*60*60*1000,                       /* older than this and the reading is not worth showing */
   now:null, alerts:[], busy:false, last:0
 };
+/* the house's coordinates come from the ZIP set in Setup */
+function wxLat(){ return wxNum(state.cfg.lat,36.8863); }
+function wxLon(){ return wxNum(state.cfg.lon,-76.1497); }
+function wxZip(){ return String(state.cfg.zip||"23455"); }
+
+/* ZIP → coordinates. Zippopotam is free, keyless and CORS-open; if it is
+   unreachable the old coordinates stay in place and the board carries on. */
+function geocodeZip(zip,cb){
+  zip=String(zip||"").trim();
+  if(!/^\d{5}$/.test(zip)){ cb(null); return; }
+  wxGet("https://api.zippopotam.us/us/"+zip,function(j){
+    var p=j&&j.places&&j.places[0];
+    if(!p||!p.latitude||!p.longitude){ cb(null); return; }
+    cb({zip:zip, lat:parseFloat(p.latitude), lon:parseFloat(p.longitude),
+        place:(p["place name"]||"")+(p["state abbreviation"]?" "+p["state abbreviation"]:"")});
+  });
+}
 
 /* WMO weather codes → plain words. */
 var WXWORD={0:"Clear",1:"Mostly clear",2:"Partly cloudy",3:"Overcast",
@@ -1793,6 +1853,70 @@ function wxBuildAlerts(nws,om){
   return out;
 }
 
+/* ------------------------------------------------------------------
+   What to hold the thermostat at from the other side of the world.
+
+   For an empty house the binding constraint is not comfort, it is mould:
+   the air conditioner has to run long enough to pull water out of the air.
+   Dew point, not temperature, is what decides how much water there is to
+   pull — 95°F at a 55°F dew point is a dry heat the system handles easily,
+   while 82°F at a 76°F dew point will quietly grow mould on drywall. So
+   the recommendation is driven by dew point and capped at 82°F, which is
+   the ceiling the Before you go list already argues for.
+   ------------------------------------------------------------------ */
+function dewPointF(tempF,rh){
+  if(typeof tempF!=="number"||typeof rh!=="number"||rh<=0) return null;
+  var t=(tempF-32)*5/9;
+  var g=Math.log(rh/100)+(17.625*t)/(243.04+t);
+  return (243.04*g/(17.625-g))*9/5+32;
+}
+function setpointAdvice(n){
+  if(!n||typeof n.temp!=="number") return null;
+  var dp=n.hum!=null?dewPointF(n.temp,n.hum):null;
+
+  /* cold enough that the question is freezing pipes, not humidity */
+  if(n.temp<45){
+    return {lo:55, hi:60, why:"freeze guard", heat:true,
+      note:"Cold outside. Hold 55–60°F so the pipes never approach freezing — "+
+           "there is no humidity load to manage at this temperature."};
+  }
+  /* mild: the air conditioner will barely run, so it cannot dehumidify */
+  if(n.temp<65){
+    return {lo:72, hi:76, why:dp!=null?"dew "+Math.round(dp)+"°, mild":"mild",
+      note:"Mild outside, so the air conditioner will hardly run and cannot dry the "+
+           "house out. Hold 72–76°F and lean on a dehumidifier set to 50% for humidity "+
+           "control — this is the weather where an empty house gets damp without ever getting hot."};
+  }
+
+  /* Cooling season, banded on dew point. The bands are deliberately narrow:
+     a 73–77°F dew point is an ordinary summer day on this coast, not an
+     emergency, so it should land beside the 78–80°F the prep list argues
+     for rather than dragging the house down into an expensive setpoint. */
+  var lo,hi,why;
+  if(dp==null){        lo=77; hi=79; why="no humidity reading"; }
+  else if(dp>=78){     lo=75; hi=77; why="dew "+Math.round(dp)+"°, extreme"; }
+  else if(dp>=73){     lo=76; hi=78; why="dew "+Math.round(dp)+"°, very humid"; }
+  else if(dp>=68){     lo=77; hi=79; why="dew "+Math.round(dp)+"°, humid"; }
+  else if(dp>=62){     lo=78; hi=80; why="dew "+Math.round(dp)+"°, moderate"; }
+  else {               lo=80; hi=82; why="dew "+Math.round(dp)+"°, dry"; }
+
+  var note="Outside it is "+n.temp+"°F"+(n.hum!=null?" at "+n.hum+"% humidity":"")+
+    (dp!=null?", a dew point of "+Math.round(dp)+"°F":"")+". Hold the Ecobee at "+lo+"–"+hi+
+    "°F with the humidity cap at 55%. ";
+  if(dp!=null&&dp>=73)
+    note+="That much moisture in the air needs long compressor runs to remove — set it any higher "+
+          "and the system will short-cycle, stop dehumidifying, and let mould start. The humidity "+
+          "cap is doing most of the work here, not the temperature.";
+  else if(dp!=null&&dp<60)
+    note+="The air is dry enough that you can sit near the 82°F ceiling and save the money.";
+  else
+    note+="That keeps runtimes long enough to dry the house without cooling an empty building harder than it needs.";
+  if(n.temp>=95)
+    note+=" At this outdoor temperature the system may not reach setpoint at all during the afternoon; "+
+          "if the Ecobee reports it is running continuously and still climbing, treat that as a fault, not weather.";
+  return {lo:lo, hi:hi, why:why, heat:false, note:note};
+}
+
 function wxPaint(){
   var slot=document.getElementById("wxNow");
   if(slot){
@@ -1808,10 +1932,27 @@ function wxPaint(){
          and these are two different numbers */
       slot.title=(word?word+", ":"")+"outside the house: "+n.temp+"°F, feels "+n.feels+"°F"+
                  (n.hum!=null?", "+n.hum+"% relative humidity":"")+
-                 " — ZIP "+WX.zip+", read at "+wxStamp(n.at);
+                 " — ZIP "+wxZip()+(state.cfg.place?" "+state.cfg.place:"")+
+                 ", read at "+wxStamp(n.at);
       slot.hidden=false;
     }else{
       slot.hidden=true;
+    }
+  }
+
+  /* the thermostat line, directly under the reading it is derived from */
+  var sp=document.getElementById("wxSet");
+  if(sp){
+    var adv=(WX.now&&Date.now()-WX.now.at<WX.STALE)?setpointAdvice(WX.now):null;
+    if(adv){
+      sp.textContent="";
+      sp.appendChild(el("span","lb","SET "));
+      sp.appendChild(document.createTextNode(adv.lo+"–"+adv.hi+"°F"));
+      if(adv.why) sp.appendChild(el("span","why"," · "+adv.why));
+      sp.title=adv.note;
+      sp.hidden=false;
+    }else{
+      sp.hidden=true;
     }
   }
 
@@ -1863,14 +2004,14 @@ function wxRefresh(force){
     wxPaint();
   }
 
-  wxGet("https://api.open-meteo.com/v1/forecast?latitude="+WX.lat+"&longitude="+WX.lon+
+  wxGet("https://api.open-meteo.com/v1/forecast?latitude="+wxLat()+"&longitude="+wxLon()+
         "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code"+
         "&hourly=temperature_2m,apparent_temperature,weather_code,precipitation"+
         "&forecast_days=3&temperature_unit=fahrenheit&precipitation_unit=inch"+
         "&timeformat=unixtime",
     function(j){ om=j; settle(); });
 
-  wxGet("https://api.weather.gov/alerts/active?point="+WX.lat+"%2C"+WX.lon+"&status=actual",
+  wxGet("https://api.weather.gov/alerts/active?point="+wxLat()+"%2C"+wxLon()+"&status=actual",
     function(j){ nws=j; settle(); });
 }
 
@@ -2025,6 +2166,31 @@ document.getElementById("addKey").addEventListener("click",function(){
   if(rows.length) rows[rows.length-1].querySelector("input").focus();
 });
 
+/* ---- ZIP, and the coordinates the weather hangs off ---- */
+function paintZipHint(msg){
+  var h=document.getElementById("zipHint");
+  if(!h) return;
+  h.textContent = msg || ("Sets the temperature, humidity and severe-weather alerts on the board."+
+    (state.cfg.place?" Currently "+state.cfg.place+".":""));
+}
+document.getElementById("sZip").addEventListener("input",function(){
+  this.value=this.value.replace(/\D/g,"").slice(0,5);
+});
+/* Look the ZIP up as soon as it is complete, so Setup can say whether it
+   found the place before you close the dialog. */
+document.getElementById("sZip").addEventListener("change",function(){
+  var z=this.value.trim();
+  if(z===String(state.cfg.zip||"")) return;
+  if(!/^\d{5}$/.test(z)){ paintZipHint("Needs five digits."); return; }
+  paintZipHint("Looking up "+z+"…");
+  geocodeZip(z,function(g){
+    if(!g){ paintZipHint("Could not look that ZIP up. Check it, or leave it — the old location is still in use."); return; }
+    state.cfg.zip=g.zip; state.cfg.lat=g.lat; state.cfg.lon=g.lon; state.cfg.place=g.place;
+    save();
+    paintZipHint("Found "+g.place+". Weather will refresh when you save.");
+  });
+});
+
 function refreshWeekGrids(){
   var c=state.cfg;
   c.lawnDates =seedSchedule(c.lawnDates||[], +c.lawnDay,  true);
@@ -2040,11 +2206,15 @@ function refreshWeekGrids(){
   });
 });
 
+var dlgZip0="";                   /* the ZIP as it stood when Setup opened */
 function openDlg(){
   var c=state.cfg;
+  dlgZip0=String(c.zip||"");
   document.getElementById("sDep").value=c.dep;
   document.getElementById("sRet").value=c.ret;
   document.getElementById("sTz").value=c.tz;
+  document.getElementById("sZip").value=c.zip||"";
+  paintZipHint();
   document.getElementById("sCar").value=c.carLoc||"garage";
   document.getElementById("carHint").textContent=LOCHINT[c.carLoc||"garage"];
   document.getElementById("sWater").checked=!!c.waterOff;
@@ -2082,6 +2252,24 @@ document.getElementById("dlgSave").addEventListener("click",function(){
   c.carLoc=document.getElementById("sCar").value;
   c.waterOff=document.getElementById("sWater").checked;
   c.mailOff=document.getElementById("sMail").checked;
+  /* the ZIP may not have been looked up yet if Save was pressed straight
+     after typing — resolve it in the background and refresh once it lands */
+  var z=document.getElementById("sZip").value.trim();
+  if(/^\d{5}$/.test(z) && z!==String(c.zip||"")){
+    /* saved before the lookup landed — resolve it now, then refresh */
+    geocodeZip(z,function(g){
+      if(!g) return;
+      c.zip=g.zip; c.lat=g.lat; c.lon=g.lon; c.place=g.place;
+      save(); wxRefresh(true);
+    });
+  }else if(String(c.zip||"")!==dlgZip0){
+    /* the lookup already landed while the dialog was open. This has to force
+       the refresh — the ordinary quarter-hour guard would otherwise leave a
+       new ZIP showing the old town's weather for up to fifteen minutes. */
+    wxRefresh(true);
+  }else{
+    wxPaint();                    /* the time zone may have moved the stamps */
+  }
   /* trim the grids to the window in case the dates moved, and drop blank keyholders */
   c.lawnDates =seedSchedule(c.lawnDates||[], +c.lawnDay,  true);
   c.cleanDates=seedSchedule(c.cleanDates||[],+c.cleanDay, true);
